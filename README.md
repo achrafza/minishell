@@ -6,6 +6,7 @@
   <img src="https://i.imgur.com/En13A7p.png" width="100%" />
 </p>
 
+## Final grade : 100/115
 
 Mandatory part : 100/100
 

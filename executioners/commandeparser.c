@@ -1,0 +1,139 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   commandeparser.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
+/*   Updated: 2025/03/26 03:33:51 by azahid           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+/* this checks for spaces in a character , pretty basic*/
+int     ft_isspace(char c)
+{
+    return (c == ' ' || c == '\t' || c == '\n' || 
+            c == '\v' || c == '\f' || c == '\r');
+}
+
+/* this pushes a string into a linked list , pretty basic hh*/
+
+void    push_to_list(t_chars **head, const char *str)
+{
+    t_chars *new_node;
+    t_chars *temp;
+
+    new_node = malloc(sizeof(t_chars));
+    if (!new_node)
+        return;
+    new_node->str = ft_strdup(str);
+    if (!new_node->str)
+    {
+        free(new_node);
+        return;
+    }
+    new_node->next = NULL;
+    if (*head == NULL)
+        *head = new_node;
+    else
+    {
+        temp = *head;
+        while (temp->next)
+            temp = temp->next;
+        temp->next = new_node;
+    }
+}
+
+/* gets the whole command and stores it inside t_comm struct , its stored in the heap 
+the adress is given to a variable inside the struct called "commande"*/
+
+void    get_full_command(t_comm *com, char *prompt)
+{
+    char    *fullcom;
+
+    if (!prompt || !*prompt)
+    {
+        com->commande = NULL;
+        return;
+    }
+    fullcom = ft_strdup(prompt);
+    if (!fullcom)
+    {
+        com->commande = NULL;
+        return;
+    }
+    com->commande = fullcom;
+}
+
+/*splits the commands into multiple chunks using the pipes*/
+
+void    commandeparser(char *arr, t_comm *com)
+{
+    char    **splitted_comms;
+
+    if (!arr)
+        return;
+    splitted_comms = ft_split(arr, '|');
+    if (!splitted_comms)
+    {
+        com->p_com = NULL;
+        return;
+    }
+    com->p_com = splitted_comms;
+}
+
+/*a function that processes if a redirection is found , pushes it into a linked list
+that holds strings
+PS : it also ignores if the redirections are quoted 
+*/
+void process_redirection(t_comm *com, char *token, int is_input) {
+  char **parts = ft_split(token, ' ');
+  int i = 0;
+  
+  while (parts[i]) {
+      if (is_input && ft_strcmp(parts[i], "<") == 0 && parts[i+1]) {
+          push_to_list(&com->infile, parts[i+1]);
+          i++;
+      }
+      else if (!is_input && ft_strcmp(parts[i], ">") == 0 && parts[i+1]) {
+          push_to_list(&com->outfile, parts[i+1]);
+          i++;
+      }
+      i++;
+  }
+  
+  i = 0;
+  while (parts[i]) {
+      free(parts[i]);
+      i++;
+  }
+  free(parts);
+}
+
+
+/*fills the input arg in the comm struct , only fills the ones with '<' aka input*/
+
+void fill_inputs(t_comm *com) {
+  if (!com || !com->p_com) return;
+  
+  for (int i = 0; com->p_com[i]; i++) {
+      if (ft_strchr(com->p_com[i], '<')) {
+          process_redirection(com, com->p_com[i], 1);
+      }
+  }
+}
+
+ /*same as above , for outputs*/
+
+void fill_outputs(t_comm *com) {
+  if (!com || !com->p_com) return;
+  
+  for (int i = 0; com->p_com[i]; i++) {
+      if (ft_strchr(com->p_com[i], '>')) {
+          process_redirection(com, com->p_com[i], 0);
+      }
+  }
+}
