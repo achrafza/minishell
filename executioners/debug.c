@@ -13,7 +13,7 @@ void print_t_comm(t_comm *cmd)
     {
         for (int i = 0; cmd->p_com[i] != NULL; i++)
         {
-            printf("[ %s ]\n", cmd->p_com[i]);
+            printf("[%s]\n", cmd->p_com[i]);
         }
     }
 
@@ -23,7 +23,7 @@ void print_t_comm(t_comm *cmd)
     t_chars *current_infile = cmd->infile; 
     while (current_infile)
     {
-        printf("[ %s ]\n", current_infile->str);
+        printf("[%s]\n", current_infile->str);
         current_infile = current_infile->next;
     }
 
@@ -31,7 +31,7 @@ void print_t_comm(t_comm *cmd)
     t_chars *current_outfile = cmd->outfile; 
     while (current_outfile)
     {
-        printf("[ %s ]\n", current_outfile->str);
+        printf("[%s]\n", current_outfile->str);
         current_outfile = current_outfile->next;
     }
 }

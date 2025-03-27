@@ -90,27 +90,38 @@ that holds strings
 PS : it also ignores if the redirections are quoted 
 */
 void process_redirection(t_comm *com, char *token, int is_input) {
-  char **parts = ft_split(token, ' ');
-  int i = 0;
-  
-  while (parts[i]) {
-      if (is_input && ft_strcmp(parts[i], "<") == 0 && parts[i+1]) {
-          push_to_list(&com->infile, parts[i+1]);
-          i++;
-      }
-      else if (!is_input && ft_strcmp(parts[i], ">") == 0 && parts[i+1]) {
-          push_to_list(&com->outfile, parts[i+1]);
-          i++;
-      }
-      i++;
-  }
-  
-  i = 0;
-  while (parts[i]) {
-      free(parts[i]);
-      i++;
-  }
-  free(parts);
+    char **parts = ft_split(token, ' ');
+    if (!parts)
+        return;
+    
+    int i = 0;
+    while (parts[i]) {
+        if (is_input && ft_strcmp(parts[i], "<") == 0) {
+            if (!parts[i+1]) {
+                fprintf(stderr, "Syntax error: no filename after '<'\n");
+                break;
+            }
+            push_to_list(&com->infile, parts[i+1]);
+            i++;
+        }
+        else if (!is_input && ft_strcmp(parts[i], ">") == 0) {
+            if (!parts[i+1]) {
+                fprintf(stderr, "Syntax error: no filename after '>'\n");
+                break;
+            }
+            push_to_list(&com->outfile, parts[i+1]);
+            i++;
+        }
+        i++;
+    }
+    
+    // Free parts
+    i = 0;
+    while (parts[i]) {
+        free(parts[i]);
+        i++;
+    }
+    free(parts);
 }
 
 
