@@ -9,7 +9,7 @@
 
 Mandatory part : 100/100
 
-Bonus : 0/15
+Bonus : 15/15
 
 ### How to use it
 
@@ -35,8 +35,7 @@ A few of the functions are "built-in", meaning we don't call the executable, we 
 
 ### Credit
 
-This two-person project was done with [macrespo](https://github.com/macrespo42).
 
-I was responsible for the parsing, argument checking, execution, redirection and piping.
+We were responsible for the parsing, argument checking, execution, redirection and piping.
 
-Macrespo took care of the environment variables, built-in functions, and signal handling.
+achraf & amine took care of the environment variables, built-in functions, and signal handling.
