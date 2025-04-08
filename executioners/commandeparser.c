@@ -21,7 +21,7 @@ int	ft_isspace(char c)
 
 /* this pushes a string into a linked list , pretty basic hh*/
 
-void	push_to_list(t_chars **head, char *str)
+void	push_to_list(t_chars **head, char *str, int type)
 {
 	t_chars	*new_node;
 	t_chars	*temp;
@@ -30,6 +30,7 @@ void	push_to_list(t_chars **head, char *str)
 	if (!new_node)
 		return ;
 	new_node->str = str;
+	new_node->type = type;
 	if (!new_node->str)
 	{
 		free(new_node);
@@ -72,11 +73,13 @@ void	get_full_command(t_comm *com, char *prompt)
 //sets all values to zero for no problem in pushing elements
 
 void setter (t_comm *com){
-  com->infile = NULL;
-  com->outfile = NULL;
+  //com->infile = NULL;
+  //com->outfile = NULL;
   com->commande = NULL;
   com->p_com = NULL;
   com->heardoc = NULL;
+  com->redirections = NULL;
+
 }
 /*splits the commands into multiple chunks using the pipes*/
 
@@ -98,7 +101,7 @@ void	commandeparser(char *arr, t_comm *com)
 that holds strings
 PS : it also ignores if the redirections are quoted
 */
-void	process_redirection(t_comm *com, char *token, int is_input)
+/*void	process_redirection(t_comm *com, char *token, int is_input)
 {
 	char	**parts;
 	int		i;
@@ -116,7 +119,7 @@ void	process_redirection(t_comm *com, char *token, int is_input)
 				fprintf(stderr, "Syntax error: no filename after '<'\n");
 				break ;
 			}
-			push_to_list(&com->infile, parts[i + 1]);
+			push_to_list(&com->infile, parts[i + 1], -1);
 			i++;
 		}
 		else if (!is_input && ft_strcmp(parts[i], ">") == 0)
@@ -126,7 +129,7 @@ void	process_redirection(t_comm *com, char *token, int is_input)
 				fprintf(stderr, "Syntax error: no filename after '>'\n");
 				break ;
 			}
-			push_to_list(&com->outfile, parts[i + 1]);
+			push_to_list(&com->outfile, parts[i + 1], -1);
 			i++;
 		}
 		i++;
@@ -139,12 +142,12 @@ void	process_redirection(t_comm *com, char *token, int is_input)
 		i++;
 	}
 	free(parts);
-}
+}*/
 
 /*fills the input arg in the comm struct ,
 	only fills the ones with '<' aka input*/
 
-void	fill_inputs(t_comm *com)
+/*void	fill_inputs(t_comm *com)
 {
 	if (!com || !com->p_com)
 		return ;
@@ -155,19 +158,19 @@ void	fill_inputs(t_comm *com)
 			process_redirection(com, com->p_com[i], 1);
 		}
 	}
-}
+}*/
 
 /*same as above , for outputs*/
 
-void	fill_outputs(t_comm *com)
-{
-	if (!com || !com->p_com)
-		return ;
-	for (int i = 0; com->p_com[i]; i++)
-	{
-		if (ft_strchr(com->p_com[i], '>'))
-		{
-			process_redirection(com, com->p_com[i], 0);
-		}
-	}
-}
+// void	fill_outputs(t_comm *com)
+// {
+// 	if (!com || !com->p_com)
+// 		return ;
+// 	for (int i = 0; com->p_com[i]; i++)
+// 	{
+// 		if (ft_strchr(com->p_com[i], '>'))
+// 		{
+// 			process_redirection(com, com->p_com[i], 0);
+// 		}
+// 	}
+// }

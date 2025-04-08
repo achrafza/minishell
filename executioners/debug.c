@@ -31,19 +31,14 @@ void print_t_comm(t_comm *cmd)
 
     printf("commande: ['%s']\n", cmd->commande);
 
-    printf("infile:\n");
-    t_chars *current_infile = cmd->infile; 
+    printf("redirections:\n");
+    t_chars *current_infile = cmd->redirections; 
     while (current_infile)
     {
-        printf("[%s]\n", current_infile->str);
-        current_infile = current_infile->next;
-    }
+        printf("[%s] (type: %s)\n", 
+               current_infile->str,
+               current_infile->type ? "output (>)" : "input (<)");
+                current_infile = current_infile->next;
+        }
 
-    printf("outfile:\n");
-    t_chars *current_outfile = cmd->outfile; 
-    while (current_outfile)
-    {
-        printf("[%s]\n", current_outfile->str);
-        current_outfile = current_outfile->next;
-    }
 }

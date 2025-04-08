@@ -44,12 +44,15 @@ void loader(char *str,t_comm *comm){
   int i = 0;
   int j = 0;
   char *sub = NULL;
-  //int len = ft_strlen(str);
-  while(str[i]){
+  int len = ft_strlen(str);
+
+  while(str[i])
+  {
     while(str[i] && str[i] !='<' && str[i] != '>')
       i++;
-    printf("hello world\n");
-    if (str[i] == '<'){
+    //printf("hello world\n");
+    if (str[i] == '<')
+    {
       i++;
       while(str[i] && ft_isspace(str[i]))
         i++;
@@ -61,29 +64,31 @@ void loader(char *str,t_comm *comm){
         if (!sub)
         // we should handle the free all elements and quit code
           return;
-        push_to_list(&comm->infile, sub);
+        push_to_list(&comm->redirections, sub, 0);
       }
       //loader(str + j,comm);
       i = j;
     }
-    else if (str[i] && str[i] == '>'){
+    else if (str[i] && str[i] == '>')
+    {
       i++;
-      while(ft_isspace(str[i]))
+      while(str[i] && ft_isspace(str[i]))
         i++;
       j = i;
-      while(!ft_isspace(str[j]) && (str[j] !='<' && str[j] != '>'))
+      while(str[j] &&!ft_isspace(str[j]) && (str[j] !='<' && str[j] != '>'))
         j++;
-      if (j>i){
+      if (j>i)
+      {
         sub = ft_substr(str, i, j - i);
         if (!sub)
           // we should handle the free all elements and quit code
           return;
-        push_to_list(&comm->outfile, sub);
+        push_to_list(&comm->redirections, sub, 1);
       }
       //loader(str + j,comm);
       i = j;
     }
-    else 
+    else if(i < len - 1)
       i++;
   }
 }

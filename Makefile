@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -fsanitize=address -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS = -fsanitize=address -Wall -Wextra -Werror
 RM = rm -f
 
 SRCS = executioners/arrayallocator.c \

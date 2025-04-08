@@ -32,7 +32,9 @@ typedef struct s_chars
 {
 	char			*str;
 	struct s_chars	*next;
+	int				type;
 }					t_chars;
+
 
 // struct holding every thing about a single commande after splted by pipe
 typedef struct s_commande
@@ -41,10 +43,8 @@ typedef struct s_commande
 	char			**p_com;
 	// commande from the stdin
 	char			*commande;
+	t_chars			*redirections;
 	// infile
-	t_chars			*infile;
-	// outfile;
-	t_chars			*outfile;
 	t_chars			*heardoc;
 }					t_comm;
 
@@ -69,7 +69,7 @@ void				fill_inputs(t_comm *com);
 void				fill_outputs(t_comm *com);
 int					ft_isspace(char c);
 void loader(char *str,t_comm *comm);
-void	push_to_list(t_chars **head, char *str);
+void	push_to_list(t_chars **head, char *str, int typ);
 
 /*		DEBUGGING		*/
 
