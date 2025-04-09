@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -fsanitize=address -Wall -Wextra -Werror
+CFLAGS = -g -fsanitize=address -Wall -Wextra -Werror
 RM = rm -f
 
 SRCS = executioners/arrayallocator.c \
@@ -17,6 +17,7 @@ SRCS = executioners/arrayallocator.c \
        executioners/debug.c\
        executioners/ft_strcmp.c\
        executioners/loader.c\
+				executioners/p_com_split.c
 
 OBJS = $(SRCS:.c=.o)
 

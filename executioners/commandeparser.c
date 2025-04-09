@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   commandeparser.c                                   :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/08 00:12:01 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/09 02:01:29 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,16 @@ void	get_full_command(t_comm *com, char *prompt)
 	com->commande = fullcom;
 }
 
-//sets all values to zero for no problem in pushing elements
+// sets all values to zero for no problem in pushing elements
 
-void setter (t_comm *com){
-  //com->infile = NULL;
-  //com->outfile = NULL;
-  com->commande = NULL;
-  com->p_com = NULL;
-  com->heardoc = NULL;
-  com->redirections = NULL;
-
+void	setter(t_comm *com)
+{
+	// com->infile = NULL;
+	// com->outfile = NULL;
+	com->commande = NULL;
+	com->p_com = NULL;
+	com->heardoc = NULL;
+	com->redirections = NULL;
 }
 /*splits the commands into multiple chunks using the pipes*/
 
@@ -87,11 +87,10 @@ void	commandeparser(char *arr, t_comm *com)
 {
 	if (!arr || !com)
 		return ;
-  setter(com);
+	setter(com);
 	loader(arr, com);
-	//fill_inputs(com);
-	//fill_outputs(com);
-	com->p_com = ft_split(arr, ' ');
+  printf("this is a test[\"%s\"]\n",arr);
+	com->p_com = p_com_split(arr);
 	com->commande = arr;
 	print_t_comm(com);
 }
