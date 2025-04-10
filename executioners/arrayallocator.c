@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 01:26:38 by azahid            #+#    #+#             */
-/*   Updated: 2025/03/26 03:53:01 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/07 15:34:18 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	double_array_size(char **str)
 	int	i;
 
 	i = 0;
-	if (!str)
+	if (!str | !*str)
 		return (-1);
 	while (str[i])
 		i++;

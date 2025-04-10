@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/27 20:43:43 by azahid            #+#    #+#             */
+/*   Updated: 2025/03/27 20:43:46 by azahid           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "../minishell.h"
 #include <readline/readline.h>
@@ -24,6 +36,8 @@ void	setup_signals(void)
 int	main(int ac, char **av, char *envp[])
 {
 	char	*input;
+	t_comm	*coms = NULL;
+	char	**str = NULL;
 
 	(void)ac;
 	(void)av;
@@ -36,11 +50,21 @@ int	main(int ac, char **av, char *envp[])
 	{
 		if (*input)
 			add_history(input);
-		parserlexer(input);
+		if (parserlexer(input, &coms, &str) == 0 && coms)
+		{
+			free_commande(coms);
+			coms = NULL;
+		}
+		if (str)
+		{
+			free2d(str);
+			str = NULL;
+		}
 		free(input);
+		if (coms)
+			free_commande(coms);
 	}
-
-	write(1, "exit\n", 5); // Handle Ctrl+D exiting
+	write(1, "exit\n", 5);
 	rl_clear_history();
 	return (0);
 }
