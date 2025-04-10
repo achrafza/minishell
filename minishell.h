@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:51:00 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/08 20:26:12 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/10 01:46:41 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int					ft_isspace(char c);
 void				loader(char *str, t_comm *comm);
 void				push_to_list(t_chars **head, char *str, int typ);
 char				**p_com_split(char *s);
+int	isquote(char c);
+int	is_redirection(char c);
 
 /*		DEBUGGING		*/
 

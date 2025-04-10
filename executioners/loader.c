@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:09:58 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/08 00:42:26 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/10 01:55:46 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,21 @@ void loader(char *str,t_comm *comm){
 
   while(str[i])
   {
-    while(str[i] && str[i] !='<' && str[i] != '>')
+    while(str[i] && !is_redirection(str[i]) && !isquote(str[i]))
       i++;
-    //printf("hello world\n");
-    if (str[i] == '<')
+    if (isquote(str[i])){
+      i++; 
+      while(str[i] && !isquote(str[i]))
+        i++;
+      i++;
+    }
+    else if (str[i] == '<')
     {
       i++;
       while(str[i] && ft_isspace(str[i]))
         i++;
       j = i;
-      while(str[j] && !ft_isspace(str[j]) && (str[j] !='<' && str[j] != '>'))
+      while(str[j] && !ft_isspace(str[j]) && !is_redirection(str[j]))
         j++;
       if (j > i){
         sub = ft_substr(str, i, j - i);
@@ -69,13 +74,13 @@ void loader(char *str,t_comm *comm){
       //loader(str + j,comm);
       i = j;
     }
-    else if (str[i] && str[i] == '>')
+    else if (str[i] == '>')
     {
       i++;
       while(str[i] && ft_isspace(str[i]))
         i++;
       j = i;
-      while(str[j] &&!ft_isspace(str[j]) && (str[j] !='<' && str[j] != '>'))
+      while(str[j] && !ft_isspace(str[j]) && !is_redirection(str[j]))
         j++;
       if (j>i)
       {
