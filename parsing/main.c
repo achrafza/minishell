@@ -10,17 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../minishell.h"
-#include <readline/readline.h>
 #include <readline/history.h>
+#include <readline/readline.h>
 
-int	g_signal;
+int		g_signal;
 
 void	handle_sigint(int sig)
 {
 	(void)sig;
-
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -40,18 +38,15 @@ int	main(int ac, char **av, char *envp[])
 	(void)ac;
 	(void)av;
 	(void)envp;
-
 	setup_signals();
 	read_history("history.txt");
-
 	while ((input = readline("minishell >> ")) != NULL)
 	{
 		if (*input)
 			add_history(input);
-		parserlexer(input);
+		parserlexer(input, envp);
 		free(input);
 	}
-
 	write(1, "exit\n", 5); // Handle Ctrl+D exiting
 	rl_clear_history();
 	return (0);

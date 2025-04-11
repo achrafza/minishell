@@ -16,16 +16,23 @@
 	then fills
 the struct based on their existence . for now the whole 4 args in the struct are filled*/
 
-void	parserlexer(char *input)
+void	parserlexer(char *input, char **envp)
 {
-  int size = 0;
-  char **str = ft_split(input, '|');
-  t_comm *coms = arrayallocator(str);
-  (void)(coms);
+	int		size;
+	char	**str;
+	t_comm	*coms;
+	t_env *env;
 
-  size = double_array_size(str);
-  free_all_commande(coms, size);
-  // free_commande(coms);
-  free2d(str);
-  return ;
+
+	env = env_list_from_array(envp);
+
+	size = 0;
+	str = ft_split(input, '|');
+	coms = arrayallocator(str, env);
+	(void)(coms);
+	size = double_array_size(str);
+	free_all_commande(coms, size);
+	// free_commande(coms);
+	free2d(str);
+	return ;
 }

@@ -16,8 +16,8 @@ size_t	ft_strlen(const char *str)
 {
 	int	i;
 
-  if(!str)
-     return 0;
+	if (!str)
+		return (0);
 	i = 0;
 	while (*str)
 	{
@@ -46,7 +46,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str = (char *)malloc((len1 + len2 + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
-
 	i = 0;
 	while (i < len1)
 	{
@@ -60,7 +59,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	str[i + j] = '\0';
-
 	return (str);
 }
-

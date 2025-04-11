@@ -32,24 +32,24 @@ char	*ft_strdup(const char *s1)
 
 #include "../minishell.h"
 
-char    *ft_strndup(const char *s, size_t n)
+char	*ft_strndup(const char *s, size_t n)
 {
-    char    *new_str;
-    size_t  i;
-    size_t  len;
+	char *new_str;
+	size_t i;
+	size_t len;
 
-    len = 0;
-    while (s[len] && len < n)
-        len++;
-    new_str = (char *)malloc(sizeof(char) * (len + 1));
-    if (!new_str)
-        return (NULL);
-    i = 0;
-    while (i < len)
-    {
-        new_str[i] = s[i];
-        i++;
-    }
-    new_str[len] = '\0';
-    return (new_str);
+	len = 0;
+	while (s[len] && len < n)
+		len++;
+	new_str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		new_str[i] = s[i];
+		i++;
+	}
+	new_str[len] = '\0';
+	return (new_str);
 }

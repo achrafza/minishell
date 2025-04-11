@@ -22,6 +22,7 @@ SRCS = $(PATH1)/arrayallocator.c \
        $(PATH1)/loader.c\
 	$(PATH1)/p_com_split.c\
        $(PATH1)/leak_utils.c\
+       $(PATH2)/exec.c\
 
 OBJS = $(SRCS:.c=.o)
 

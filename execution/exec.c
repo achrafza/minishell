@@ -1,6 +1,83 @@
 #include "../minishell.h"
 
-void    execute(t_comm *comm)
+/*char **grabenv(char **envp)
 {
-    
+	int count = 0;
+	char **full_env;
+
+	if (!envp || !*envp)
+		return (NULL);
+
+	while (envp[count])
+		count++;
+
+	full_env = malloc(sizeof(char *) * (count + 1));
+	if (!full_env)
+		return (NULL);
+
+	for (int i = 0; i < count; i++)
+	{
+		full_env[i] = strdup(envp[i]);
+		if (!full_env[i])
+		{
+			while (--i >= 0)
+				free(full_env[i]);
+			free(full_env);
+			return (NULL);
+		}
+	}
+	full_env[count] = NULL;
+	return (full_env);
+}*/
+
+t_env *push_env(t_env *head, char **new_env)
+{
+	t_env *node;
+
+	node = malloc(sizeof(t_env));
+	if (!node)
+		return (head);
+	node->env = *new_env;
+	node->next = head;
+	return (node);
+}
+
+t_env	*create_env_node(char *env_str)
+{
+	t_env *new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->env = strdup(env_str);
+	if (!new_node->env)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	return (new_node);
+}
+
+t_env	*env_list_from_array(char **env)
+{
+	t_env *head = NULL;
+	t_env *next;
+	int i = 0;
+
+	while (env && env[i])
+	{
+		next = create_env_node(env[i]);
+		if (!next)
+			return (head);
+		if (!head)
+			head = next;
+		else
+		{
+			t_env *tmp = head;
+			while (tmp->next)
+				tmp = tmp->next;
+			tmp->next = next;
+		}
+		i++;
+	}
+	return (head);
 }

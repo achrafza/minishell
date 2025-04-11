@@ -74,22 +74,23 @@ void	get_full_command(t_comm *com, char *prompt)
 
 void	setter(t_comm *com)
 {
-	// com->infile = NULL;
-	// com->outfile = NULL;
 	com->commande = NULL;
 	com->p_com = NULL;
 	com->heardoc = NULL;
 	com->redirections = NULL;
+	com->env = NULL;
+
 }
 /*splits the commands into multiple chunks using the pipes*/
 
-void	commandeparser(char *arr, t_comm *com)
+void	commandeparser(char *arr, t_comm *com, t_env *env)
 {
 	if (!arr || !com)
 		return ;
 	setter(com);
 	loader(arr, com);
-  	printf("this is a test[\"%s\"]\n",arr);
+	com->env = env;
+	printf("this is a test[\"%s\"]\n", arr);
 	com->p_com = p_com_split(arr);
 	com->commande = arr;
 	print_t_comm(com);

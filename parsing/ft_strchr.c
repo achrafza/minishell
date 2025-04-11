@@ -10,5 +10,5 @@ char	*ft_strchr(char *s, int c)
 	{
 		return ((char *)s);
 	}
-	return ((char*)NULL);
+	return ((char *)NULL);
 }

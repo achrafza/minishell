@@ -36,7 +36,7 @@ void	skip_spaces(int *i, char *str)
 }
 
 // splits each string and stores the variables in the array of structs
-t_comm	*arrayallocator(char **arr)
+t_comm	*arrayallocator(char **arr, t_env *env)
 {
 	int		i;
 	int		size;
@@ -53,7 +53,7 @@ t_comm	*arrayallocator(char **arr)
 		return (NULL);
 	while (arr[i])
 	{
-		commandeparser(arr[i], &comms[i]);
+		commandeparser(arr[i], &comms[i], env);
 		i++;
 	}
 	// Ensure the last element is properly null-terminated if required
