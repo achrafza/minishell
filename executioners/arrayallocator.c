@@ -18,7 +18,7 @@ int	double_array_size(char **str)
 	int	i;
 
 	i = 0;
-	if (!str | !*str)
+	if (!str || !*str)
 		return (-1);
 	while (str[i])
 		i++;
