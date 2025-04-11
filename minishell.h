@@ -32,9 +32,9 @@ typedef struct s_ints
 
 typedef struct s_env
 {
-	char *env;
-	struct s_env *next;
-}	t_env;
+	char			*env;
+	struct s_env	*next;
+}					t_env;
 
 typedef struct s_chars
 {
@@ -53,13 +53,12 @@ typedef struct s_commande
 	t_chars			*redirections;
 	// infile
 	t_chars			*heardoc;
-	//env
-	t_env 			*env;
+	// env
+	t_env			*env;
 }					t_comm;
 
-
 void				parserlexer(char *input, char **envp);
-t_comm				*arrayallocator(char **arr, t_env  *env);
+t_comm				*arrayallocator(char **arr, t_env *env);
 void				commandeparser(char *arr, t_comm *com, t_env *envp);
 
 /*			UTILITIES			*/
@@ -89,19 +88,19 @@ int					double_array_size(char **str);
 
 void				print_t_comm(t_comm *cmd);
 
-void 				free1d(void *array);
-void 				free2d(char **array);
-void 				free_commande(t_comm *com);
-void 				free_all_commande(t_comm *comms, int size);
+void				free1d(void *array);
+void				free2d(char **array);
+void				free_commande(t_comm *com);
+void				free_all_commande(t_comm *comms, int size);
 
-			/*	env   */
-char	**parse_envp(char *envp[]);
-char	*joined(char *commande, char *sp);
-char	*find_access(char *path[], char *commande);
+/*	env   */
+char				**parse_envp(char *envp[]);
+char				*joined(char *commande, char *sp);
+char				*find_access(char *path[], char *commande);
 
-char 	**grabenv(char **envp);
-t_env 	*push_env(t_env *head, char **new_env);
-t_env	*env_list_from_array(char **env);
-t_env	*create_env_node(char *env_str);
+char				**grabenv(char **envp);
+t_env				*push_env(t_env *head, char **new_env);
+t_env				*env_list_from_array(char **env);
+t_env				*create_env_node(char *env_str);
 
 #endif
