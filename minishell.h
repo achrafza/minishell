@@ -47,6 +47,7 @@ typedef struct s_commande
 	t_chars			*heardoc;
 }					t_comm;
 
+
 void				parserlexer(char *input);
 t_comm				*arrayallocator(char **arr);
 void				commandeparser(char *arr, t_comm *com);
@@ -72,9 +73,15 @@ void				push_to_list(t_chars **head, char *str, int typ);
 char				**p_com_split(char *s);
 int	isquote(char c);
 int	is_redirection(char c);
+int	double_array_size(char **str);
 
 /*		DEBUGGING		*/
 
 void				print_t_comm(t_comm *cmd);
+
+void free1d(void *array);
+void free2d(char **array);
+void free_commande(t_comm *com);
+void free_all_commande(t_comm *comms, int size);
 
 #endif

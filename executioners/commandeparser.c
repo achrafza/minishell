@@ -89,7 +89,7 @@ void	commandeparser(char *arr, t_comm *com)
 		return ;
 	setter(com);
 	loader(arr, com);
-  printf("this is a test[\"%s\"]\n",arr);
+  	printf("this is a test[\"%s\"]\n",arr);
 	com->p_com = p_com_split(arr);
 	com->commande = arr;
 	print_t_comm(com);
