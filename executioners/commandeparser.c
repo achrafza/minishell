@@ -80,7 +80,6 @@ void	setter(t_comm *com)
 	com->p_com = NULL;
 	com->heardoc = NULL;
 	com->redirections = NULL;
-	com->size = 0;
 }
 /*splits the commands into multiple chunks using the pipes*/
 

@@ -38,7 +38,6 @@ typedef struct s_chars
 // struct holding every thing about a single commande after splted by pipe
 typedef struct s_commande
 {
-	int				size;
 	// parsed commande with the right attribute;
 	char			**p_com;
 	// commande from the stdin
@@ -74,6 +73,7 @@ void				push_to_list(t_chars **head, char *str, int typ);
 char				**p_com_split(char *s);
 int	isquote(char c);
 int	is_redirection(char c);
+int	double_array_size(char **str);
 
 /*		DEBUGGING		*/
 

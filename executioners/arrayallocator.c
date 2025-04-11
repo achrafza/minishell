@@ -13,7 +13,7 @@
 #include "../minishell.h"
 
 // gives me how much element i should allocate in the array of structs
-static int	double_array_size(char **str)
+int	double_array_size(char **str)
 {
 	int	i;
 

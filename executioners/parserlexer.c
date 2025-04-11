@@ -18,11 +18,14 @@ the struct based on their existence . for now the whole 4 args in the struct are
 
 void	parserlexer(char *input)
 {
+  int size = 0;
   char **str = ft_split(input, '|');
   t_comm *coms = arrayallocator(str);
   (void)(coms);
 
-  free_commande(coms);
+  size = double_array_size(str);
+  free_all_commande(coms, size);
+  // free_commande(coms);
   free2d(str);
   return ;
 }

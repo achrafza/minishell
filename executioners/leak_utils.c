@@ -66,8 +66,6 @@ void free_commande(t_comm *com)
     
     if (com->heardoc)
         free_chars(com->heardoc);
-    
-    free(com);
 }
 
 void free_all_commande(t_comm *comms, int size)
