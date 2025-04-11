@@ -40,8 +40,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 }
 // string
 // ls -a > hello < hee
-int loader(char *str,t_comm *comm)
-{
+void loader(char *str,t_comm *comm){
   int i = 0;
   int j = 0;
   char *sub = NULL;
@@ -68,7 +67,8 @@ int loader(char *str,t_comm *comm)
       if (j > i){
         sub = ft_substr(str, i, j - i);
         if (!sub)
-          return (-1);
+        // we should handle the free all elements and quit code
+          return;
         push_to_list(&comm->redirections, sub, 0);
       }
       //loader(str + j,comm);
@@ -86,7 +86,8 @@ int loader(char *str,t_comm *comm)
       {
         sub = ft_substr(str, i, j - i);
         if (!sub)
-          return (-1);
+          // we should handle the free all elements and quit code
+          return;
         push_to_list(&comm->redirections, sub, 1);
       }
       //loader(str + j,comm);
@@ -95,5 +96,4 @@ int loader(char *str,t_comm *comm)
     else if(i < len - 1)
       i++;
   }
-  return (0);
 }

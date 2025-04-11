@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=leak 
+CFLAGS = -g -Wall -Wextra -Werror
 RM = rm -f
 
 SRCS = executioners/arrayallocator.c \
@@ -18,16 +18,15 @@ SRCS = executioners/arrayallocator.c \
        executioners/ft_strcmp.c\
        executioners/loader.c\
 	executioners/p_com_split.c\
-	executioners/leak_utilities.c\
-
+       executioners/leak_utils.c
 
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
+	$(RM) $(OBJS)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
-
 %.o: %.c minishell.h
 	$(CC) $(CFLAGS) -c $< -o $@
 

@@ -13,20 +13,20 @@
 #include "../minishell.h"
 #include <stdlib.h>
 
-int is_redirection(char c)
+int	is_redirection(char c)
 {
 	return (c == '<' || c == '>');
 }
 
-int isquote(char c)
+int	isquote(char c)
 {
 	return (c == '\'' || c == '\"');
 }
 
-int count_checker(char *s)
+int	count_checker(char *s)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	i = 0;
 	count = 0;
@@ -46,7 +46,7 @@ int count_checker(char *s)
 			}
 			else if (s[i] && isquote(s[i]))
 			{
-				i++;
+        i++;
 				count++;
 				while (s[i] && !isquote(s[i]))
 					i++;
@@ -67,99 +67,80 @@ int count_checker(char *s)
 	return (count);
 }
 
-int ft_wdlen(char *str)
+int	ft_wdlen(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (isquote(str[i]))
-	{
-		i++;
-		while (str[i] && !isquote(str[i]))
-			i++;
-		if (!str[i])
-			return -1;
-		return i + 1;
-	}
+  if (isquote(str[i]))
+  {
+    i++;
+    while(str[i] && !isquote(str[i]))
+      i++;
+    if (!str[i])
+      return -1;
+    return i+1;
+  }
 	while (str[i] && !ft_isspace(str[i]) && !is_redirection(str[i]))
 		i++;
 	return (i);
 }
 
 //"      ls   "     out     "
-char *alloc_word(char *des, int len, char *src)
+char *alloc_word(char *des,int len,char *src){
+  int i = 0;
+  while(src[i] && i < len){
+    des[i]=src[i];
+    i++;
+  }
+  des[i]=0;
+  return des;
+}
+char	**allocate(char **arr, char *str, int cc)
 {
-	int i = 0;
-	while (src[i] && i < len)
+	int		i;
+	int		wrdlen;
+	int		j;
+
+	j = 0;
+	cc += 1 - 1;
+	i = 0;
+	while (str[i])
 	{
-		des[i] = src[i];
-		i++;
+		while (ft_isspace(str[i]))
+			i++;
+		if (is_redirection(str[i]))
+		{
+			i++;
+			while (str[i] && ft_isspace(str[i]))
+				i++;
+			while (str[i] && !ft_isspace(str[i]) && !is_redirection(str[i]))
+				i++;
+		}
+		else if (str[i])
+		{
+			wrdlen = ft_wdlen(str + i);
+	    if (wrdlen == -1)
+        //free all the past array
+        return NULL;
+      arr[j] = (char *)malloc(wrdlen + 1);
+      arr[j] = alloc_word(arr[j],wrdlen,str + i);
+      printf("%d -->[%s]\n",j,arr[j]);
+      i += wrdlen;
+      j++;
+		}
 	}
-	des[i] = 0;
-	return des;
+	arr[j] = NULL;
+	return (arr);
 }
-
-char **allocate(char **arr, char *str, int count)
+char	**p_com_split(char *str)
 {
-    int i = 0;
-    int j = 0;
-    
-    while (str[i] && j < count)
-    {
-        while (ft_isspace(str[i]))
-            i++;
-        
-        if (is_redirection(str[i]))
-        {
-            // Handle redirections
-            i++;
-            while (str[i] && ft_isspace(str[i]))
-                i++;
-            while (str[i] && !ft_isspace(str[i]) && !is_redirection(str[i]))
-                i++;
-        }
-        else if (str[i])
-        {
-            int wrdlen = ft_wdlen(str + i);
-            if (wrdlen == -1) {
-                while (j-- > 0)
-                    free(arr[j]);
-                return NULL;
-            }
-            
-            arr[j] = (char *)malloc(wrdlen + 1);
-            if (!arr[j]) {
-                while (j-- > 0)
-                    free(arr[j]);
-                return NULL;
-            }
-            
-            alloc_word(arr[j], wrdlen, str + i);
-            i += wrdlen;
-            j++;
-        }
-    }
-    arr[j] = NULL;
-    return arr;
-}
+	int		count;
+	char	**res;
 
-char **p_com_split(char *str)
-{
-    if (!str)
-        return NULL;
-        
-    int count = count_checker(str);
-    if (count <= 0)
-        return NULL;
-        
-    char **res = (char **)malloc((count + 1) * sizeof(char *));
-    if (!res)
-        return NULL;
-        
-    if (!allocate(res, str, count)) {
-        free(res);
-        return NULL;
-    }
-    
-    return res;
+	count = count_checker(str);
+	printf("\n%d\n", count);
+	res = (char **)malloc((count + 1) * sizeof(char *));
+	res = allocate(res, str, count);
+	return (res);
 }

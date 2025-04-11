@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-void free_1d(void *array) 
+void free1d(void *array) 
 {
     if (array != NULL)
         free(array);
@@ -68,4 +68,19 @@ void free_commande(t_comm *com)
         free_chars(com->heardoc);
     
     free(com);
+}
+
+void free_all_commande(t_comm *comms, int size)
+{
+	int i;
+
+	if (!comms)
+		return;
+	i = 0;
+	while (i < size)
+	{
+		free_commande(&comms[i]);
+		i++;
+	}
+	free(comms);
 }

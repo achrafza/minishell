@@ -38,6 +38,7 @@ typedef struct s_chars
 // struct holding every thing about a single commande after splted by pipe
 typedef struct s_commande
 {
+	int				size;
 	// parsed commande with the right attribute;
 	char			**p_com;
 	// commande from the stdin
@@ -47,7 +48,8 @@ typedef struct s_commande
 	t_chars			*heardoc;
 }					t_comm;
 
-int					parserlexer(char *input, t_comm **coms, char **str[]);
+
+void				parserlexer(char *input);
 t_comm				*arrayallocator(char **arr);
 void				commandeparser(char *arr, t_comm *com);
 
@@ -67,19 +69,19 @@ void				get_full_command(t_comm *com, char *prompt);
 void				fill_inputs(t_comm *com);
 void				fill_outputs(t_comm *com);
 int					ft_isspace(char c);
-int				loader(char *str, t_comm *comm);
+void				loader(char *str, t_comm *comm);
 void				push_to_list(t_chars **head, char *str, int typ);
 char				**p_com_split(char *s);
 int	isquote(char c);
 int	is_redirection(char c);
-/*LEAKS*/
-
-void free2d(char **array);
-void free_1d(void *array);
-void free_commande(t_comm *cmd);
 
 /*		DEBUGGING		*/
 
 void				print_t_comm(t_comm *cmd);
+
+void free1d(void *array);
+void free2d(char **array);
+void free_commande(t_comm *com);
+void free_all_commande(t_comm *comms, int size);
 
 #endif

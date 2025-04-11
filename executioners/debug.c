@@ -39,6 +39,6 @@ void print_t_comm(t_comm *cmd)
                current_infile->str,
                current_infile->type ? "output (>)" : "input (<)");
                 current_infile = current_infile->next;
-    }
-    
+        }
+
 }
