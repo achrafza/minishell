@@ -98,7 +98,6 @@ char				**parse_envp(char *envp[]);
 char				*joined(char *commande, char *sp);
 char				*find_access(char *path[], char *commande);
 
-char				**grabenv(char **envp);
 t_env				*push_env(t_env *head, char **new_env);
 t_env				*env_list_from_array(char **env);
 t_env				*create_env_node(char *env_str);

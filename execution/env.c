@@ -1,35 +1,5 @@
 #include "../minishell.h"
 
-/*char **grabenv(char **envp)
-{
-	int count = 0;
-	char **full_env;
-
-	if (!envp || !*envp)
-		return (NULL);
-
-	while (envp[count])
-		count++;
-
-	full_env = malloc(sizeof(char *) * (count + 1));
-	if (!full_env)
-		return (NULL);
-
-	for (int i = 0; i < count; i++)
-	{
-		full_env[i] = strdup(envp[i]);
-		if (!full_env[i])
-		{
-			while (--i >= 0)
-				free(full_env[i]);
-			free(full_env);
-			return (NULL);
-		}
-	}
-	full_env[count] = NULL;
-	return (full_env);
-}*/
-
 t_env *push_env(t_env *head, char **new_env)
 {
 	t_env *node;

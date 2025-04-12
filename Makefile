@@ -3,26 +3,27 @@ CC = cc
 CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
 RM = rm -f
 
-PATH1 = ./parsing
-PATH2 = ./execution
+PARSE_DIR = ./parsing
+EXEC_DIR = ./execution
+UTILS_DIR = ./utils
 
-SRCS = $(PATH1)/arrayallocator.c \
-       $(PATH1)/commandeparser.c \
-       $(PATH1)/find_access.c \
-       $(PATH1)/ft_split.c \
-       $(PATH1)/ft_strdup.c \
-       $(PATH1)/ft_strjoin.c \
-       $(PATH1)/ft_strnstr.c \
-       $(PATH1)/main.c \
-       $(PATH1)/parserlexer.c\
-       $(PATH1)/ft_strchr.c\
-       $(PATH1)/ft_memset.c\
-       $(PATH1)/debug.c\
-       $(PATH1)/ft_strcmp.c\
-       $(PATH1)/loader.c\
-	$(PATH1)/p_com_split.c\
-       $(PATH1)/leak_utils.c\
-       $(PATH2)/exec.c\
+SRCS = $(PARSE_DIR)/arrayallocator.c \
+       $(PARSE_DIR)/commandeparser.c \
+       $(PARSE_DIR)/find_access.c \
+       $(PARSE_DIR)/main.c \
+       $(PARSE_DIR)/parserlexer.c\
+       $(PARSE_DIR)/debug.c\
+       $(PARSE_DIR)/loader.c\
+	$(PARSE_DIR)/p_com_split.c\
+       $(PARSE_DIR)/leak_utils.c\
+       $(EXEC_DIR)/env.c\
+       $(UTILS_DIR)/ft_strcmp.c\
+       $(UTILS_DIR)/ft_strchr.c\
+       $(UTILS_DIR)/ft_memset.c\
+       $(UTILS_DIR)/ft_split.c \
+       $(UTILS_DIR)/ft_strdup.c \
+       $(UTILS_DIR)/ft_strjoin.c \
+       $(UTILS_DIR)/ft_strnstr.c \
 
 OBJS = $(SRCS:.c=.o)
 
