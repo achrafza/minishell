@@ -6,13 +6,14 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 20:43:43 by azahid            #+#    #+#             */
-/*   Updated: 2025/03/27 20:43:46 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/12 03:10:50 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <stdio.h>
 
 int		g_signal;
 
@@ -40,11 +41,15 @@ int	main(int ac, char **av, char *envp[])
 	(void)envp;
 	setup_signals();
 	read_history("history.txt");
-	while ((input = readline("minishell >> ")) != NULL)
+	while (1337)
 	{
+    input = readline("minishell >> ");
+    if (input == NULL) break;
 		if (*input)
 			add_history(input);
 		parserlexer(input, envp);
+    //usleep(100);
+    //fflush(stdout);
 		free(input);
 	}
 	write(1, "exit\n", 5); // Handle Ctrl+D exiting

@@ -22,6 +22,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
+# include <sys/wait.h>
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -86,6 +87,10 @@ char				**p_com_split(char *s);
 int					isquote(char c);
 int					is_redirection(char c);
 int					double_array_size(char **str);
+char				**createargs(t_comm *com);
+
+/*			Execution			*/
+int execute(t_comm *com,char **envp);
 
 /*		DEBUGGING		*/
 
@@ -98,9 +103,9 @@ void				free_all_commande(t_comm *comms, int size);
 void				free_env(t_env *head);
 
 /*	env   */
-char				**parse_envp(char *envp[]);
+char				**parse_envp(t_env *e);
 char				*joined(char *commande, char *sp);
-char				*find_access(char *path[], char *commande);
+char				*find_access(t_comm *com);
 
 t_env				*push_env(t_env *head, char **new_env);
 t_env				*env_list_from_array(char **env);

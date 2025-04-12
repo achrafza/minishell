@@ -80,16 +80,3 @@ void	free_all_commande(t_comm *comms, int size)
 	}
 	free(comms);
 }
-
-void	free_env(t_env *head)
-{
-	t_env *tmp;
-
-	while (head)
-	{
-		tmp = head->next;
-		free(head->env);
-		free(head);
-		head = tmp;
-	}
-}

@@ -9,7 +9,6 @@ UTILS_DIR = ./utils
 
 SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(PARSE_DIR)/commandeparser.c \
-       $(PARSE_DIR)/find_access.c \
        $(PARSE_DIR)/main.c \
        $(PARSE_DIR)/parserlexer.c\
        $(PARSE_DIR)/debug.c\
@@ -21,6 +20,8 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/pwd.c\
        $(EXEC_DIR)/cd.c\
        $(EXEC_DIR)/unset.c\
+       $(EXEC_DIR)/find_access.c \
+       $(EXEC_DIR)/execute.c \
        $(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\

@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:18:10 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/10 03:29:16 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/12 03:16:37 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ char	**allocate(char **arr, char *str, int cc)
 				return (NULL);
 			arr[j] = (char *)malloc(wrdlen + 1);
 			arr[j] = alloc_word(arr[j], wrdlen, str + i);
-			printf("%d -->[%s]\n", j, arr[j]);
 			i += wrdlen;
 			j++;
 		}
@@ -143,7 +142,6 @@ char	**p_com_split(char *str)
 	char	**res;
 
 	count = count_checker(str);
-	printf("\n%d\n", count);
 	res = (char **)malloc((count + 1) * sizeof(char *));
 	res = allocate(res, str, count);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/09 02:01:29 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/12 03:16:21 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,10 @@ void	commandeparser(char *arr, t_comm *com, t_env *env)
 	setter(com);
 	loader(arr, com);
 	com->env = env;
-	printf("this is a test[\"%s\"]\n", arr);
 	com->p_com = p_com_split(arr);
+  com->p_com = createargs(com);
 	com->commande = arr;
-	print_t_comm(com);
+	//print_t_comm(com);
 }
 
 /*a function that processes if a redirection is found ,
