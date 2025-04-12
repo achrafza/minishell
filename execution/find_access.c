@@ -55,15 +55,15 @@ char	*find_access(t_comm *com)
 
 	i = 0;
 	sp = parse_envp(com->env);
-	if (!sp)
-		return (NULL);
-	while (sp[i])
+	// if (!sp)
+	// 	return (NULL);
+	while (sp && sp[i])
 	{
 		joinedpath = joined(com->p_com[0], sp[i]);
 		if (!joinedpath)
-			return (NULL);
+		return (NULL);
 		if (++i && !(access(joinedpath, F_OK | X_OK)))
-			return (joinedpath);
+		return (joinedpath);
 		free(joinedpath);
 	}
 	if (!access(com->p_com[0], F_OK | X_OK))
@@ -80,7 +80,8 @@ char	**createargs(t_comm *com)
 	{
 		return (NULL);
 	}
-  	free(com->p_com[0]);
+	/*5atar : segv*/
+  	//free(com->p_com[0]);
   	com->p_com[0] = first;
 	return com->p_com;
 }

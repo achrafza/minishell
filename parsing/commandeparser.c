@@ -94,7 +94,7 @@ void	commandeparser(char *arr, t_comm *com, t_env *env)
 	if (check_builtin(com))
   		com->p_com = createargs(com);
 	com->commande = arr;
-	print_t_comm(com);
+	//print_t_comm(com);
 }
 
 /*a function that processes if a redirection is found ,

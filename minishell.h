@@ -26,6 +26,8 @@
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+//extern int debug = 0;
+
 typedef struct s_ints
 {
 	int				i;
@@ -59,7 +61,7 @@ typedef struct s_commande
 	t_env			*env;
 }					t_comm;
 
-void				parserlexer(char *input, char **envp);
+void				parserlexer(char *input, char **envp, t_env *env);
 t_comm				*arrayallocator(char **arr, t_env *env);
 void				commandeparser(char *arr, t_comm *com, t_env *envp);
 
@@ -116,5 +118,6 @@ char				*find_access(t_comm *com);
 t_env				*push_env(t_env *head, char **new_env);
 t_env				*env_list_from_array(char **env);
 t_env				*create_env_node(char *env_str);
+char 				**envtodoublearr(t_env *e);
 
 #endif

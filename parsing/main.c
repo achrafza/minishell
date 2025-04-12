@@ -35,20 +35,23 @@ void	setup_signals(void)
 int	main(int ac, char **av, char *envp[])
 {
 	char	*input;
+	t_env 	*env;
+
 
 	(void)ac;
 	(void)av;
 	(void)envp;
+	env = env_list_from_array(envp);
 	setup_signals();
 	read_history("history.txt");
 	while (1337)
 	{
-    input = readline("minihell:~ ");
-    if (input == NULL) break;
-		if (*input)
-			add_history(input);
-		parserlexer(input, envp);
-		free(input);
+		input = readline("\x1b[34mminihell:~ \x1b[0m");
+    	if (input == NULL) break;
+			if (*input)
+				add_history(input);
+			parserlexer(input, envp, env);
+			free(input);
 	}
 	write(1, "exit\n", 5); // Handle Ctrl+D exiting
 	rl_clear_history();
