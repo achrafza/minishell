@@ -4,8 +4,7 @@ int env(t_env *env)
 {
 	while (env)
 	{
-		write(1, env->env, strlen(env->env));
-		write(1, "\n", 1);
+		printf("%s\n", env->env);
 		env = env->next;
 	}
 	return (0);
