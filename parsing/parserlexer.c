@@ -22,8 +22,8 @@ void	parserlexer(char *input, char **envp)
 	char	**str;
 	t_comm	*coms;
 	t_env *env;
-  int i = 0;
-  int id = 0;
+  	int i = 0;
+  	int id = 0;
 
 	env = env_list_from_array(envp);
 	size = 0;
@@ -36,9 +36,8 @@ void	parserlexer(char *input, char **envp)
     wait(NULL);
     i++;
   }
-
 	free_all_commande(coms, size);
-	// free_commande(coms);
+	free_env(env);
 	free2d(str);
 	return ;
 }

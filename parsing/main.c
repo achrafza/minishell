@@ -43,13 +43,11 @@ int	main(int ac, char **av, char *envp[])
 	read_history("history.txt");
 	while (1337)
 	{
-    input = readline("minishell >> ");
+    input = readline("minihell:~ ");
     if (input == NULL) break;
 		if (*input)
 			add_history(input);
 		parserlexer(input, envp);
-    //usleep(100);
-    //fflush(stdout);
 		free(input);
 	}
 	write(1, "exit\n", 5); // Handle Ctrl+D exiting

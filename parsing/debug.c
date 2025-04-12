@@ -18,7 +18,7 @@ of the p_comm struct used to parse the initial command*/
 void	print_t_comm(t_comm *cmd)
 {
 	t_chars	*current_infile;
-	t_env	*current_env;
+	//t_env	*current_env;
 	
 	if (cmd == NULL)
 		return ;
@@ -37,11 +37,12 @@ void	print_t_comm(t_comm *cmd)
 			current_infile->type ? "output (>)" : "input (<)");
 		current_infile = current_infile->next;
 	}
-	printf("env:\n");
+	/*printf("env:\n");
 	current_env = cmd->env;
 	while (current_env)
 	{
 		printf("[%s]\n", current_env->env);
 		current_env = current_env->next;
 	}
+	*/
 }

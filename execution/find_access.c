@@ -80,7 +80,7 @@ char	**createargs(t_comm *com)
 	{
 		return (NULL);
 	}
-  free(com->p_com[0]);
-  com->p_com[0] = first;
+  	free(com->p_com[0]);
+  	com->p_com[0] = first;
 	return com->p_com;
 }

@@ -88,9 +88,15 @@ int					isquote(char c);
 int					is_redirection(char c);
 int					double_array_size(char **str);
 char				**createargs(t_comm *com);
+int 				check_builtin(t_comm *com);
+
 
 /*			Execution			*/
-int execute(t_comm *com,char **envp);
+
+int 				execute(t_comm *com,char **envp);
+int 				cd(char *path, t_env *e);
+char				*pwd(void);
+int 				unset(t_env **env, char *var);
 
 /*		DEBUGGING		*/
 
