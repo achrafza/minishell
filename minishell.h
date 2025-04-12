@@ -87,11 +87,12 @@ int					double_array_size(char **str);
 /*		DEBUGGING		*/
 
 void				print_t_comm(t_comm *cmd);
-
+/*		FREE			*/
 void				free1d(void *array);
 void				free2d(char **array);
 void				free_commande(t_comm *com);
 void				free_all_commande(t_comm *comms, int size);
+void				free_env(t_env *head);
 
 /*	env   */
 char				**parse_envp(char *envp[]);

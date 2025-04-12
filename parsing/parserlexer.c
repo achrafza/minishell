@@ -32,7 +32,7 @@ void	parserlexer(char *input, char **envp)
 	(void)(coms);
 	size = double_array_size(str);
 	free_all_commande(coms, size);
-	// free_commande(coms);
+	free_env(env);
 	free2d(str);
 	return ;
 }
