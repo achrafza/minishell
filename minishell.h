@@ -21,6 +21,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -72,7 +73,9 @@ char				*ft_strchr(char *s, int c);
 char				*ft_strndup(const char *s, size_t n);
 void				*ft_memset(void *s, int c, size_t n);
 int					ft_strcmp(char *s1, char *s2);
+int					ft_strncmp(char *s1, char *s2, size_t n);
 
+/*		Parsing 		*/
 void				get_full_command(t_comm *com, char *prompt);
 void				fill_inputs(t_comm *com);
 void				fill_outputs(t_comm *com);

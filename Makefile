@@ -17,6 +17,10 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
 	$(PARSE_DIR)/p_com_split.c\
        $(PARSE_DIR)/leak_utils.c\
        $(EXEC_DIR)/env.c\
+       $(EXEC_DIR)/env_utils.c\
+       $(EXEC_DIR)/pwd.c\
+       $(EXEC_DIR)/cd.c\
+       $(EXEC_DIR)/unset.c\
        $(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\
@@ -24,6 +28,8 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(UTILS_DIR)/ft_strdup.c \
        $(UTILS_DIR)/ft_strjoin.c \
        $(UTILS_DIR)/ft_strnstr.c \
+       $(UTILS_DIR)/ft_strncmp.c \
+
 
 OBJS = $(SRCS:.c=.o)
 
