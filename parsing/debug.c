@@ -12,36 +12,50 @@
 
 #include "../minishell.h"
 
-/*function used for debugging purposes , prints the whole content
-of the p_comm struct used to parse the initial command*/
-
 void	print_t_comm(t_comm *cmd)
 {
 	t_chars	*current_infile;
-	// t_env	*current_env;
-	
+
 	if (cmd == NULL)
 		return ;
-	printf("p_com:\n");
+	printf("\033[0;34m----------------- Command Info -----------------\033[0m\n");
+	printf("\033[0;32m p_com:\033[0m\n");
 	if (cmd->p_com)
 	{
 		for (int i = 0; cmd->p_com[i] != NULL; i++)
-			printf("[%s]\n", cmd->p_com[i]);
+			printf("\033[0;33m [%s]\033[0m\n", cmd->p_com[i]);
 	}
-	printf("commande: ['%s']\n", cmd->commande);
-	printf("redirections:\n");
+	printf("\033[0;32m commande: \033[0m['%s']\n", cmd->commande);
+	printf("\033[0;32m redirections:\033[0m\n");
 	current_infile = cmd->redirections;
 	while (current_infile)
 	{
-		printf("[%s] (type: %s)\n", current_infile->str,
-			current_infile->type ? "output (>)" : "input (<)");
+		printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+			current_infile->str, current_infile->type ? "output (>)" : "input (<)");
 		current_infile = current_infile->next;
 	}
-	// printf("env:\n");
-	// current_env = cmd->env;
-	// while (current_env)
-	// {
-	// 	printf("[%s]\n", current_env->env);
-	// 	current_env = current_env->next;
-	// }
+}
+
+void	print_t_env(t_comm *cmd)
+{
+	int env_printed = 0;
+	char input;
+	t_env	*current_env;
+	
+	printf("\033[0;32m Do you want to print the env? (y/n): \033[0m");
+	scanf(" %c", &input); 
+	if (input == 'y' || input == 'Y')
+	{
+		if (!env_printed) 
+		{
+			printf("\033[0;32m env:\033[0m\n");
+			current_env = cmd->env;
+			while (current_env)
+			{
+				printf("\033[0;33m [%s]\033[0m\n", current_env->env);
+				current_env = current_env->next;
+			}
+			env_printed = 1; 
+		}
+	}
 }

@@ -26,12 +26,18 @@
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+/*Debug mode */
 #ifdef DEBUG
     #define DEBUG_MODE 1
 #else
     #define DEBUG_MODE 0
 #endif
 
+#ifdef DBG_ENV
+    #define DBG_ENG 1
+#else
+    #define DBG_ENV 0
+#endif
 
 typedef struct s_ints
 {
@@ -110,6 +116,8 @@ int					execute_all(t_comm *coms, char **envp, int size);
 /*		DEBUGGING		*/
 
 void				print_t_comm(t_comm *cmd);
+void				print_t_env(t_comm *cmd);
+
 /*		FREE			*/
 void				free1d(void *array);
 void				free2d(char **array);

@@ -96,6 +96,8 @@ void	commandeparser(char *arr, t_comm *com, t_env *env)
 	com->commande = arr;
 	if (DEBUG_MODE)
 		print_t_comm(com);
+	if (DBG_ENV)
+		print_t_env(com);
 }
 
 /*a function that processes if a redirection is found ,

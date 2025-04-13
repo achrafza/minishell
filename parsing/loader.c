@@ -104,3 +104,4 @@ void	loader(char *str, t_comm *comm)
 			i++;
 	}
 }
+
