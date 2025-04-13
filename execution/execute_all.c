@@ -148,23 +148,17 @@ int	execute_all(t_comm *coms, char **envp, int size)
 	int	pipes[2 * (size - 1)];
 	int	pids[size];
   	int i = 0;
-
-	if (!check_builtin(coms))
-  {
-    exec_builtin(coms);
-    return (0);
-  }
-  while (i < size - 1)
-	{
+	  while (i < size - 1)
+	  {
 		if (pipe(pipes + i * 2) == -1)
 		{
 			perror("pipe");
 			exit(EXIT_FAILURE);
 		}
-    i++;
+		i++;
 	}
-  i = 0;
-  while (i < size)
+	i = 0;
+	while (i < size)
 	{
 		pids[i] = fork();
 		if (pids[i] == -1)
@@ -180,14 +174,22 @@ int	execute_all(t_comm *coms, char **envp, int size)
 				dup2(pipes[i * 2 + 1], 1);
 			for (int j = 0; j < 2 * (size - 1); j++)
 				close(pipes[j]);
-			if (!coms[i].p_com || !coms[i].p_com[0])
+			/*if (!coms[i].p_com || !coms[i].p_com[0])
 			{
 				perror("command not found");
 				exit(127);
+			}*/
+			if (!check_builtin(&coms[i]))
+			{
+				exec_builtin(&coms[i]);
+				exit(0);
 			}
-			execve(coms[i].p_com[0], coms[i].p_com, envp);
+			else 
+			{
+				execve(coms[i].p_com[0], coms[i].p_com, envp);
 			perror("execve");
 			exit(127);
+			}
 		}
 		i++;
 	}
