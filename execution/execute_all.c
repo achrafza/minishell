@@ -93,8 +93,8 @@ int  exec_builtin(t_comm *com)
       return (unset(&com->env, com->p_com[1]), 0);
     else if(!ft_strcmp(com->p_com[0], "cd"))
       return (cd (get_next_word(com->commande), com->env), 0);
-    /*else if(!ft_strcmp(com->p_com[0], "debug"))
-      return (debug = 1 , 0);*/
+	else if(!ft_strcmp(com->p_com[0], "echo"))
+      return (echo(com->p_com), 0);
   }
   return (1);
 }
@@ -111,7 +111,7 @@ int check_builtin(t_comm *com)
       return (unset(&com->env, com->p_com[1]), 0);
     else if(!ft_strcmp(com->p_com[0], "cd"))
       return (0);
-	else if(!ft_strcmp(com->p_com[0], "debug"))
+	else if(!ft_strcmp(com->p_com[0], "echo"))
 	  return (0);
   }
   return (1);
