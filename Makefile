@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
 RM = rm -f
 
 PARSE_DIR = ./parsing

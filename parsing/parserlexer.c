@@ -26,8 +26,10 @@ void	parserlexer(char *input, char **envp, t_env *env)
 	str = ft_split(input, '|');
 	coms = arrayallocator(str, env);
 	size = double_array_size(str);
-	envp = envtodoublearr(coms->env);
-	execute_all(coms,envp,size);
+	if (coms && coms->env)
+		envp = envtodoublearr(coms->env);
+	if (size > 0)
+		execute_all(coms,envp,size);
 	free_all_commande(coms, size);
 	//free_env(env);
 	free2d(str);
