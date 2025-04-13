@@ -143,59 +143,62 @@ char **envtodoublearr(t_env *e)
 	return envp;
 }
 
-int	execute_all(t_comm *coms, char **envp, int size)
+int execute_all(t_comm *coms, char **envp, int size)
 {
-	int	pipes[2 * (size - 1)];
-	int	pids[size];
-  	int i = 0;
-	  while (i < size - 1)
-	  {
-		if (pipe(pipes + i * 2) == -1)
-		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
-		}
-		i++;
-	}
-	i = 0;
-	while (i < size)
-	{
-		pids[i] = fork();
-		if (pids[i] == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		if (pids[i] == 0)
-		{
-			if (i > 0)
-				dup2(pipes[(i - 1) * 2], 0);
-			if (i < size - 1)
-				dup2(pipes[i * 2 + 1], 1);
-			for (int j = 0; j < 2 * (size - 1); j++)
-				close(pipes[j]);
-			/*if (!coms[i].p_com || !coms[i].p_com[0])
-			{
-				perror("command not found");
-				exit(127);
-			}*/
-			if (!check_builtin(&coms[i]))
-			{
-				exec_builtin(&coms[i]);
-				exit(0);
-			}
-			else 
-			{
-				execve(coms[i].p_com[0], coms[i].p_com, envp);
-			perror("execve");
-			exit(127);
-			}
-		}
-		i++;
-	}
-	for (int i = 0; i < 2 * (size - 1); i++)
-		close(pipes[i]);
-	for (int i = 0; i < size; i++)
-		waitpid(pids[i], NULL, 0);
-	return (0);
+    int pipes[2 * (size - 1)];
+    int pids[size];
+    int i = 0;
+    while (i < size - 1)
+    {
+        if (pipe(pipes + i * 2) == -1)
+        {
+            perror("pipe");
+            exit(EXIT_FAILURE);
+        }
+        i++;
+    }
+    i = 0;
+    while (i < size)
+    {
+        pids[i] = fork();
+        if (pids[i] == -1)
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+        if (pids[i] == 0)
+        {
+            if (i > 0)
+                dup2(pipes[(i - 1) * 2], 0);
+            if (i < size - 1)
+                dup2(pipes[i * 2 + 1], 1);
+            for (int j = 0; j < 2 * (size - 1); j++)
+                close(pipes[j]);
+            
+            // Check if command exists
+            if (!coms[i].p_com || !coms[i].p_com[0])
+            {
+                perror("command not found");
+                exit(127);
+            }
+            
+            if (!check_builtin(&coms[i]))
+            {
+                if (exec_builtin(&coms[i]))
+                    exit(0);
+            }
+            else 
+            {
+                execve(coms[i].p_com[0], coms[i].p_com, envp);
+                perror(coms[i].p_com[0]);
+                exit(127);
+            }
+        }
+        i++;
+    }
+    for (int i = 0; i < 2 * (size - 1); i++)
+        close(pipes[i]);
+    for (int i = 0; i < size; i++)
+        waitpid(pids[i], NULL, 0);
+    return (0);
 }

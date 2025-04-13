@@ -53,7 +53,7 @@ int	main(int ac, char **av, char *envp[])
 			parserlexer(input, envp, env);
 			free(input);
 	}
-	write(1, "exit\n", 5); // Handle Ctrl+D exiting
+	write(1, "exit\n", 5);
 	rl_clear_history();
 	return (0);
 }
