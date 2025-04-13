@@ -49,7 +49,10 @@ int	main(int ac, char **av, char *envp[])
 		input = readline("\x1b[1;35mli7wak_choffih : \x1b[0m");
     	if (input == NULL) break;
 			if (*input)
+			{
 				add_history(input);
+				write_history("history.txt");
+			}
 			parserlexer(input, envp, env);
 			free(input);
 	}
