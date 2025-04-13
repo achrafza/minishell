@@ -26,7 +26,12 @@
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-//extern int debug = 0;
+#ifdef DEBUG
+    #define DEBUG_MODE 1
+#else
+    #define DEBUG_MODE 0
+#endif
+
 
 typedef struct s_ints
 {

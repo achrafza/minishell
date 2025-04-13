@@ -1,0 +1,18 @@
+ls
+clear
+ls
+cd ..
+ls
+clear
+ls
+cd ..
+ls
+clear
+ls
+exit
+ls
+clear
+ls
+claer
+ls
+ls | ls
