@@ -1,6 +1,6 @@
 NAME = minishell
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -g -Wall -Wextra -Werror
 RM = rm -f
 
 PARSE_DIR = ./parsing
@@ -22,6 +22,7 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/unset.c\
        $(EXEC_DIR)/find_access.c \
        $(EXEC_DIR)/execute.c \
+       $(EXEC_DIR)/execute_all.c \
        $(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\

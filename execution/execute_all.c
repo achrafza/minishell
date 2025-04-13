@@ -1,18 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   execute_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/12 01:45:49 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:13:40 by azahid           ###   ########.fr       */
+/*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
+/*   Updated: 2025/04/12 23:02:51 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <sys/wait.h>
+#include <unistd.h>
 
-/*void  exit_prog(void)
+/* int two_pipes(t_comm *coms,char **envp){
+  int id;
+  int fd[2];
+
+  if(pipe(fd) == -1)
+	exit (1);
+  id = fork();
+  if (id == -1)
+	exit (1);
+  if(id == 0){
+	dup2(fd[1], 1);
+	close(fd[0]);
+	execute(coms, envp);
+	close(fd[1]);
+  }
+  waitpid(id,NULL,0);
+  return (id);
+ }
+int	execute_all(t_comm *coms,char **envp,int size){
+  int i = 0;
+  int pid;
+  int pids[size];
+  while(i < size - 1)
+  {
+	pid = two_pipes(&coms[i],envp);
+	i++;
+  }
+  pid = execute(&coms[i], envp);
+  i = 0;
+  while(i < size)
+	waitpid(pids[i++], NULL, 0);
+  waitpid(pid, NULL, 0);
+  return (0);
+} */
+
+void  exit_prog(void)
 {
   exit(0);
 }
@@ -56,8 +93,8 @@ int  exec_builtin(t_comm *com)
       return (unset(&com->env, com->p_com[1]), 0);
     else if(!ft_strcmp(com->p_com[0], "cd"))
       return (cd (get_next_word(com->commande), com->env), 0);
-    else if(!ft_strcmp(com->p_com[0], "debug"))
-      return (debug = 1 , 0);
+    /*else if(!ft_strcmp(com->p_com[0], "debug"))
+      return (debug = 1 , 0);*/
   }
   return (1);
 }
@@ -104,26 +141,57 @@ char **envtodoublearr(t_env *e)
 	return envp;
 }
 
-int execute(t_comm *com,char **envp)
+int	execute_all(t_comm *coms, char **envp, int size)
 {
-  if (!check_builtin(com))
+	int	pipes[2 * (size - 1)];
+	int	pids[size];
+  	int i = 0;
+
+	if (!check_builtin(coms))
   {
-    exec_builtin(com);
+    exec_builtin(coms);
     return (0);
   }
-  if (!com->p_com)
-  {
-    perror("commande not found");
-    return 1;
-  }
-  int id = fork();
-  if (id != 0)
-    return (1);
-  if (com->p_com)
-  {
-    execve(com->p_com[0], com->p_com, envp);
-    perror("commande not found");
-    return (1);
-  }
-  return (id);
-}*/
+  while (i < size - 1)
+	{
+		if (pipe(pipes + i * 2) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+    i++;
+	}
+  i = 0;
+  while (i < size)
+	{
+		pids[i] = fork();
+		if (pids[i] == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		if (pids[i] == 0)
+		{
+			if (i > 0)
+				dup2(pipes[(i - 1) * 2], 0);
+			if (i < size - 1)
+				dup2(pipes[i * 2 + 1], 1);
+			for (int j = 0; j < 2 * (size - 1); j++)
+				close(pipes[j]);
+			if (!coms[i].p_com || !coms[i].p_com[0])
+			{
+				perror("command not found");
+				exit(127);
+			}
+			execve(coms[i].p_com[0], coms[i].p_com, envp);
+			perror("execve");
+			exit(127);
+		}
+		i++;
+	}
+	for (int i = 0; i < 2 * (size - 1); i++)
+		close(pipes[i]);
+	for (int i = 0; i < size; i++)
+		waitpid(pids[i], NULL, 0);
+	return (0);
+}

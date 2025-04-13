@@ -46,7 +46,7 @@ int	main(int ac, char **av, char *envp[])
 	read_history("history.txt");
 	while (1337)
 	{
-		input = readline("\x1b[34mminihell:~ \x1b[0m");
+		input = readline("\x1b[1;35mli7wak_choffih : \x1b[0m");
     	if (input == NULL) break;
 			if (*input)
 				add_history(input);

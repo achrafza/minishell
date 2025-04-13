@@ -99,6 +99,8 @@ int 				execute(t_comm *com,char **envp);
 int 				cd(char *path, t_env *e);
 char				*pwd(void);
 int 				unset(t_env **env, char *var);
+int					execute_all(t_comm *coms, char **envp, int size);
+
 
 /*		DEBUGGING		*/
 

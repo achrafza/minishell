@@ -21,20 +21,13 @@ void	parserlexer(char *input, char **envp, t_env *env)
 	int		size;
 	char	**str;
 	t_comm	*coms;
-  	int i = 0;
-  	int id = 0;
 
 	size = 0;
 	str = ft_split(input, '|');
 	coms = arrayallocator(str, env);
 	size = double_array_size(str);
 	envp = envtodoublearr(coms->env);
-  	while(i < size)
-  	{
-    	id = execute(&coms[i], envp);
-    	wait(NULL);
-    	i++;
-  	}
+	execute_all(coms,envp,size);
 	free_all_commande(coms, size);
 	//free_env(env);
 	free2d(str);
