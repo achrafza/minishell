@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 06:30:37 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 08:49:52 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,14 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 	com->env = env;
 	com->p_com = p_com_split(arr);
   while(com->p_com && com->p_com[i])
-  {
+  {    
+
     com->p_com[i] = parser(com->p_com[i], env);
     i++;
+  }
+  if (!com  || !com->p_com){
+      perror("syntax error");
+      return 1;
   }
 	if (check_builtin(com))
   		com->p_com = createargs(com);

@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:27:54 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 02:34:27 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 08:16:34 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*find_access(t_comm *com)
 
 	i = 0;
 	sp = parse_envp(com->env);
-	while (sp && sp[i])
+	while (sp && sp[i] && com->p_com)
 	{
 		joinedpath = joined(com->p_com[0], sp[i]);
 		if (!joinedpath)
@@ -63,7 +63,7 @@ char	*find_access(t_comm *com)
 			return (free2d(sp), joinedpath);
 		free(joinedpath);
 	}
-	if (!access(com->p_com[0], F_OK | X_OK))
+	if (com->p_com && !access(com->p_com[0], F_OK | X_OK))
 		return (com->p_com[0]);
 	return (free2d(sp), NULL);
 }
@@ -78,7 +78,7 @@ char	**createargs(t_comm *com)
 		return (NULL);
 	}
 	/*5atar : segv*/
-  	//free(com->p_com[0]);
+  free(com->p_com[0]);
   	com->p_com[0] = first;
 	return com->p_com;
 }
