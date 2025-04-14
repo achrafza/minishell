@@ -7,15 +7,17 @@ PARSE_DIR = ./parsing
 EXEC_DIR = ./execution
 UTILS_DIR = ./utils
 
-SRCS = $(PARSE_DIR)/arrayallocator.c \
+SRCS = 						$(PARSE_DIR)/arrayallocator.c \
        $(PARSE_DIR)/commandeparser.c \
        $(PARSE_DIR)/main.c \
        $(PARSE_DIR)/parserlexer.c\
        $(PARSE_DIR)/debug.c\
        $(PARSE_DIR)/loader.c\
-	$(PARSE_DIR)/p_com_split.c\
+				$(PARSE_DIR)/p_com_split.c\
        $(PARSE_DIR)/leak_utils.c\
-       $(EXEC_DIR)/env.c\
+			 $(PARSE_DIR)/pipe_split.c\
+			 $(PARSE_DIR)/hollyparser.c\
+       						$(EXEC_DIR)/env.c\
        $(EXEC_DIR)/env_utils.c\
        $(EXEC_DIR)/pwd.c\
        $(EXEC_DIR)/cd.c\
@@ -25,7 +27,7 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/execute_all.c \
        $(EXEC_DIR)/echo.c \
        $(EXEC_DIR)/shlvl.c \
-       $(UTILS_DIR)/ft_strcmp.c\
+       						$(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\
        $(UTILS_DIR)/ft_split.c \

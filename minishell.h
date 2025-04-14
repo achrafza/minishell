@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:51:00 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/10 01:46:41 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 06:08:08 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int					is_redirection(char c);
 int					double_array_size(char **str);
 char				**createargs(t_comm *com);
 int 				check_builtin(t_comm *com);
+char **pipe_split(char *str);
+char *parser(char *str,t_env *env);
 
 
 /*			Execution			*/

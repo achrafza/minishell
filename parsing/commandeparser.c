@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:16:21 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 06:30:37 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,19 @@ void	setter(t_comm *com)
 
 int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
+  int i =0;
+
 	if (!arr || !com)
 		return -1;
 	setter(com);
 	loader(arr, com);
 	com->env = env;
 	com->p_com = p_com_split(arr);
+  while(com->p_com && com->p_com[i])
+  {
+    com->p_com[i] = parser(com->p_com[i], env);
+    i++;
+  }
 	if (check_builtin(com))
   		com->p_com = createargs(com);
 	com->commande = arr;
