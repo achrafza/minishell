@@ -4,22 +4,39 @@ t_env *push_env(t_env *head, char **new_env)
 {
 	t_env *node;
 
-	node = malloc(sizeof(t_env));
+	if (!new_env || !*new_env)
+		return (head);
+	node = create_env_node(*new_env);
 	if (!node)
 		return (head);
-	node->env = *new_env;
 	node->next = head;
 	return (node);
 }
 
 t_env	*create_env_node(char *env_str)
 {
-	t_env *new_node = malloc(sizeof(t_env));
+	t_env	*new_node;
+	char	*ptr_to_tosawi;
+
+	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->env = strdup(env_str);
-	if (!new_node->env)
+
+	ptr_to_tosawi = ft_strchr(env_str, '=');
+	if (!ptr_to_tosawi)
 	{
+		new_node->key = ft_strdup(env_str);
+		new_node->value = NULL;
+	}
+	else
+	{
+		new_node->key = strndup(env_str, ptr_to_tosawi - env_str);
+		new_node->value = strdup(ptr_to_tosawi + 1);
+	}
+	if (!new_node->key || (ptr_to_tosawi && !new_node->value))
+	{
+		free(new_node->key);
+		free(new_node->value);
 		free(new_node);
 		return (NULL);
 	}

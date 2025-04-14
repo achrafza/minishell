@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 02:06:07 by amabbadi          #+#    #+#             */
+/*   Updated: 2025/04/14 02:06:07 by amabbadi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	env(t_comm *cmd)
@@ -14,8 +26,8 @@ void	env(t_comm *cmd)
 	env = cmd->env;
 	while (env)
 	{
-		if (env->env && *env->env)
-			printf("%s\n", env->env);
+		if (env->key && env->value)
+			printf("%s=%s\n", env->key, env->value);
 		env = env->next;
 	}
 }

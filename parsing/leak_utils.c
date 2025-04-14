@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   leak_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 02:07:00 by amabbadi          #+#    #+#             */
+/*   Updated: 2025/04/14 02:07:01 by amabbadi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 void	free1d(void *array)
@@ -88,7 +100,8 @@ void	free_env(t_env *head)
 	while (head)
 	{
 		tmp = head->next;
-		free(head->env);
+		free(head->key);
+		free(head->value);
 		free(head);
 		head = tmp;
 	}

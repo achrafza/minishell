@@ -35,7 +35,7 @@ int	parserlexer(char *input, char **envp, t_env *env)
 	if (size > 0)
 		execute_all(coms,envp,size);
 	free_all_commande(coms, size);
-	//free_env(env);
+	
 	free2d(str);
 	return 0;
 }

@@ -57,8 +57,7 @@ int	main(int ac, char **av, char *envp[])
     	if (input == NULL) break;
 			if (*input)
 				add_history(input);
-			if (envp && env)
-				parserlexer(input, envp, env);
+			parserlexer(input, envp, env);
 			free(input);
 	}
 	write(1, "exit\n", 5);

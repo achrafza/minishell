@@ -47,8 +47,9 @@ typedef struct s_ints
 
 typedef struct s_env
 {
-	char			*env;
-	struct s_env	*next;
+	char			*key;
+	char			*value;
+	struct s_env 	*next;
 }					t_env;
 
 typedef struct s_chars
@@ -74,7 +75,7 @@ typedef struct s_commande
 
 int					parserlexer(char *input, char **envp, t_env *env);
 t_comm				*arrayallocator(char **arr, t_env *env);
-void				commandeparser(char *arr, t_comm *com, t_env *envp);
+int					commandeparser(char *arr, t_comm *com, t_env *env);
 
 /*			UTILITIES			*/
 

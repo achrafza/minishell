@@ -83,10 +83,10 @@ void	setter(t_comm *com)
 }
 /*splits the commands into multiple chunks using the pipes*/
 
-void	commandeparser(char *arr, t_comm *com, t_env *env)
+int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
 	if (!arr || !com)
-		return ;
+		return -1;
 	setter(com);
 	loader(arr, com);
 	com->env = env;
@@ -98,6 +98,7 @@ void	commandeparser(char *arr, t_comm *com, t_env *env)
 		print_t_comm(com);
 	if (DBG_ENV)
 		print_t_env(com);
+	return (0);
 }
 
 /*a function that processes if a redirection is found ,

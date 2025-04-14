@@ -38,24 +38,28 @@ void	print_t_comm(t_comm *cmd)
 
 void	print_t_env(t_comm *cmd)
 {
-	int env_printed = 0;
-	char input;
+	char	input;
+	char	choice;
 	t_env	*current_env;
-	
+
 	printf("\033[0;32m Do you want to print the env? (y/n): \033[0m");
-	scanf(" %c", &input); 
+	scanf(" %c", &input);
 	if (input == 'y' || input == 'Y')
 	{
-		if (!env_printed) 
+		printf("\033[0;32m What would you like to print?\n");
+		printf("1. Keys only\n2. Values only\n3. Both keys and values\n\033[0m");
+		scanf(" %c", &choice);
+
+		current_env = cmd->env;
+		while (current_env)
 		{
-			printf("\033[0;32m env:\033[0m\n");
-			current_env = cmd->env;
-			while (current_env)
-			{
-				printf("\033[0;33m [%s]\033[0m\n", current_env->env);
-				current_env = current_env->next;
-			}
-			env_printed = 1; 
+			if (choice == '1' && current_env->key)
+				printf("\033[0;33m %s\033[0m\n", current_env->key);
+			else if (choice == '2' && current_env->value)
+				printf("\033[0;33m %s\033[0m\n", current_env->value);
+			else if (choice == '3' && current_env->key && current_env->value)
+				printf("\033[0;33m [%s=%s]\033[0m\n", current_env->key, current_env->value);
+			current_env = current_env->next;
 		}
 	}
 }
