@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:50:34 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:15:18 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 06:08:29 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	parserlexer(char *input, char **envp, t_env *env)
 	t_comm	*coms;
 
 	size = 0;
-	str = ft_split(input, '|');
+	str = pipe_split(input);
 	if (!str)
 		return (-1);
 	coms = arrayallocator(str, env);

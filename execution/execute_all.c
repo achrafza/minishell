@@ -210,7 +210,8 @@ int execute_all(t_comm *coms, char **envp, int size)
 
     for (int i = 0; i < size; i++)
         waitpid(pids[i], NULL, 0);
-    free2d(envp);
+    if (envp && *envp)
+      free2d(envp);
     envp = NULL;
 
     return 0;
