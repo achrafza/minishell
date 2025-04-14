@@ -24,6 +24,7 @@ SRCS = $(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/execute.c \
        $(EXEC_DIR)/execute_all.c \
        $(EXEC_DIR)/echo.c \
+       $(EXEC_DIR)/shlvl.c \
        $(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\

@@ -26,10 +26,16 @@ void	handle_sigint(int sig)
 	rl_redisplay();
 }
 
+void	handle_sigquit(int sig)
+{
+	(void)sig;
+}
+
 void	setup_signals(void)
 {
 	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, handle_sigquit);
+	signal(SIGTERM, SIG_IGN);
 }
 
 int	main(int ac, char **av, char *envp[])
@@ -42,6 +48,7 @@ int	main(int ac, char **av, char *envp[])
 	(void)av;
 	(void)envp;
 	env = env_list_from_array(envp);
+	increment_shlvl(env);
 	setup_signals();
 	read_history("history.txt");
 	while (1337)
@@ -50,7 +57,8 @@ int	main(int ac, char **av, char *envp[])
     	if (input == NULL) break;
 			if (*input)
 				add_history(input);
-			parserlexer(input, envp, env);
+			if (envp && env)
+				parserlexer(input, envp, env);
 			free(input);
 	}
 	write(1, "exit\n", 5);

@@ -72,7 +72,7 @@ typedef struct s_commande
 	t_env			*env;
 }					t_comm;
 
-void				parserlexer(char *input, char **envp, t_env *env);
+int					parserlexer(char *input, char **envp, t_env *env);
 t_comm				*arrayallocator(char **arr, t_env *env);
 void				commandeparser(char *arr, t_comm *com, t_env *envp);
 
@@ -111,7 +111,9 @@ int 				cd(char *path, t_env *e);
 char				*pwd(void);
 int 				unset(t_env **env, char *var);
 int 				echo(char **input);
+void				env(t_comm *cmd);
 int					execute_all(t_comm *coms, char **envp, int size);
+void 				increment_shlvl(t_env *env);
 
 
 /*		DEBUGGING		*/

@@ -14,41 +14,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-/* int two_pipes(t_comm *coms,char **envp){
-  int id;
-  int fd[2];
-
-  if(pipe(fd) == -1)
-	exit (1);
-  id = fork();
-  if (id == -1)
-	exit (1);
-  if(id == 0){
-	dup2(fd[1], 1);
-	close(fd[0]);
-	execute(coms, envp);
-	close(fd[1]);
-  }
-  waitpid(id,NULL,0);
-  return (id);
- }
-int	execute_all(t_comm *coms,char **envp,int size){
-  int i = 0;
-  int pid;
-  int pids[size];
-  while(i < size - 1)
-  {
-	pid = two_pipes(&coms[i],envp);
-	i++;
-  }
-  pid = execute(&coms[i], envp);
-  i = 0;
-  while(i < size)
-	waitpid(pids[i++], NULL, 0);
-  waitpid(pid, NULL, 0);
-  return (0);
-} */
-
 void  exit_prog(void)
 {
   exit(0);
@@ -95,6 +60,10 @@ int  exec_builtin(t_comm *com)
       return (cd (get_next_word(com->commande), com->env), 0);
 	else if(!ft_strcmp(com->p_com[0], "echo"))
       return (echo(com->p_com), 0);
+	else if(!ft_strcmp(com->p_com[0], "env"))
+	  return (env(com), 0);
+	else if(!ft_strcmp(com->p_com[0], "export"))
+	  return (printf("export not here yet ;>\n"), 0);
   }
   return (1);
 }
@@ -112,6 +81,10 @@ int check_builtin(t_comm *com)
     else if(!ft_strcmp(com->p_com[0], "cd"))
       return (0);
 	else if(!ft_strcmp(com->p_com[0], "echo"))
+	  return (0);
+	else if(!ft_strcmp(com->p_com[0], "env"))
+	  return (0);
+	else if(!ft_strcmp(com->p_com[0], "export"))
 	  return (0);
   }
   return (1);
