@@ -42,7 +42,7 @@ char	*joined(char *commande, char *sp)
 		return (NULL);
 	joinedpath = ft_strjoin(sp, com);
 	if (!joinedpath)
-		return (free(com), NULL);
+		return (NULL);
 	return (joinedpath);
 }
 
@@ -58,14 +58,14 @@ char	*find_access(t_comm *com)
 	{
 		joinedpath = joined(com->p_com[0], sp[i]);
 		if (!joinedpath)
-			return (free2d(sp), NULL);
+			return (NULL);
 		if (++i && !(access(joinedpath, F_OK | X_OK)))
-			return (free2d(sp), joinedpath);
-		free(joinedpath);
+			return (joinedpath);
+		//free(joinedpath);
 	}
 	if (com->p_com && !access(com->p_com[0], F_OK | X_OK))
 		return (com->p_com[0]);
-	return (free2d(sp), NULL);
+	return (com->p_com[0]);
 }
 
 char	**createargs(t_comm *com)
@@ -78,7 +78,7 @@ char	**createargs(t_comm *com)
 		return (NULL);
 	}
 	/*5atar : segv*/
-  free(com->p_com[0]);
+  //free(com->p_com[0]);
   	com->p_com[0] = first;
 	return com->p_com;
 }
