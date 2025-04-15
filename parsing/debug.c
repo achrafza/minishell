@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:54:21 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/07 23:54:22 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/14 23:02:07 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,19 @@ void	print_t_comm(t_comm *cmd)
 	current_infile = cmd->redirections;
 	while (current_infile)
 	{
-		printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
-			current_infile->str, current_infile->type ? "output (>)" : "input (<)");
+    if (current_infile->type == 0)
+		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+			  current_infile->str, current_infile->type ? "output (>)" : "input (<)");
+    else if (current_infile->type == 1)
+		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+			  current_infile->str, current_infile->type ? "output (>)" : "input (<)");
+    else if (current_infile->type == 2)
+		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+			  current_infile->str,  "HEARDOC (<<)");
+    else if (current_infile->type == 3)
+		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+			  current_infile->str,"append mode (>>)") ;
+
 		current_infile = current_infile->next;
 	}
 }
