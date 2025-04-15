@@ -28,13 +28,13 @@ int	push_to_list(t_chars **head, char *str, int type)
 
 	new_node = malloc(sizeof(t_chars));
 	if (!new_node)
-		return 1;
+		return (1);
 	new_node->str = str;
 	new_node->type = type;
 	if (!new_node->str)
 	{
 		free(new_node);
-		return 1;
+		return (1);
 	}
 	new_node->next = NULL;
 	if (*head == NULL)
@@ -46,7 +46,7 @@ int	push_to_list(t_chars **head, char *str, int type)
 			temp = temp->next;
 		temp->next = new_node;
 	}
-  return 0;
+	return (0);
 }
 
 /* gets the whole command and stores it inside t_comm struct ,
@@ -80,32 +80,33 @@ void	setter(t_comm *com)
 	com->heardoc = NULL;
 	com->redirections = NULL;
 	com->env = NULL;
-
 }
 /*splits the commands into multiple chunks using the pipes*/
 
 int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
-  int i =0;
-  int status;
+	int	i;
+	int	status;
 
+	i = 0;
 	if (!arr || !com)
-		return -1;
+		return (-1);
 	setter(com);
-	status = loader(arr, com,env);
+	status = loader(arr, com, env);
 	com->env = env;
-  com->p_com = p_com_split(arr);
-  while(com->p_com && com->p_com[i])
-  {    
-    com->p_com[i] = parser(com->p_com[i], env);
-    i++;
-  }
-  if (!com  || !com->p_com){
-      perror("syntax error");
-      return 1;
-  }
+	com->p_com = p_com_split(arr);
+	while (com->p_com && com->p_com[i])
+	{
+		com->p_com[i] = parser(com->p_com[i], env);
+		i++;
+	}
+	if (!com || !com->p_com)
+	{
+		perror("syntax error");
+		return (1);
+	}
 	if (check_builtin(com))
-  		com->p_com = createargs(com);
+		com->p_com = createargs(com);
 	com->commande = arr;
 	if (DEBUG_MODE)
 		print_t_comm(com);

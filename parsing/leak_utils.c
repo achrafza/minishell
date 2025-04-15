@@ -80,7 +80,7 @@ void	free_commande(t_comm *com)
 
 void	free_all_commande(t_comm *comms, int size)
 {
-	int i;
+	int	i;
 
 	if (!comms)
 		return ;
@@ -95,7 +95,7 @@ void	free_all_commande(t_comm *comms, int size)
 
 void	free_env(t_env *head)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	while (head)
 	{

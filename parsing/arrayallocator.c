@@ -53,7 +53,7 @@ t_comm	*arrayallocator(char **arr, t_env *env)
 		return (NULL);
 	while (arr[i])
 	{
-	  commandeparser(arr[i], &comms[i], env);
+		commandeparser(arr[i], &comms[i], env);
 		i++;
 	}
 	// Ensure the last element is properly null-terminated if required

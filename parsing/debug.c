@@ -30,19 +30,20 @@ void	print_t_comm(t_comm *cmd)
 	current_infile = cmd->redirections;
 	while (current_infile)
 	{
-    if (current_infile->type == 0)
-		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
-			  current_infile->str, current_infile->type ? "output (>)" : "input (<)");
-    else if (current_infile->type == 1)
-		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
-			  current_infile->str, current_infile->type ? "output (>)" : "input (<)");
-    else if (current_infile->type == 2)
-		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
-			  current_infile->str,  "HEARDOC (<<)");
-    else if (current_infile->type == 3)
-		  printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
-			  current_infile->str,"append mode (>>)") ;
-
+		if (current_infile->type == 0)
+			printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+				current_infile->str,
+				current_infile->type ? "output (>)" : "input (<)");
+		else if (current_infile->type == 1)
+			printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+				current_infile->str,
+				current_infile->type ? "output (>)" : "input (<)");
+		else if (current_infile->type == 2)
+			printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+				current_infile->str, "HEARDOC (<<)");
+		else if (current_infile->type == 3)
+			printf("\033[0;36m [%s] \033[0m(type: \033[0;35m%s\033[0m)\n",
+				current_infile->str, "append mode (>>)");
 		current_infile = current_infile->next;
 	}
 }
@@ -60,7 +61,6 @@ void	print_t_env(t_comm *cmd)
 		printf("\033[0;32m What would you like to print?\n");
 		printf("1. Keys only\n2. Values only\n3. Both keys and values\n\033[0m");
 		scanf(" %c", &choice);
-
 		current_env = cmd->env;
 		while (current_env)
 		{
@@ -69,7 +69,8 @@ void	print_t_env(t_comm *cmd)
 			else if (choice == '2' && current_env->value)
 				printf("\033[0;33m %s\033[0m\n", current_env->value);
 			else if (choice == '3' && current_env->key && current_env->value)
-				printf("\033[0;33m [%s=%s]\033[0m\n", current_env->key, current_env->value);
+				printf("\033[0;33m [%s=%s]\033[0m\n", current_env->key,
+					current_env->value);
 			current_env = current_env->next;
 		}
 	}

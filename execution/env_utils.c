@@ -1,8 +1,8 @@
 #include "../minishell.h"
 
-t_env *push_env(t_env *head, char **new_env)
+t_env	*push_env(t_env *head, char **new_env)
 {
-	t_env *node;
+	t_env	*node;
 
 	if (!new_env || !*new_env)
 		return (head);
@@ -21,7 +21,6 @@ t_env	*create_env_node(char *env_str)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-
 	ptr_to_tosawi = ft_strchr(env_str, '=');
 	if (!ptr_to_tosawi)
 	{

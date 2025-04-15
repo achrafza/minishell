@@ -140,8 +140,9 @@ char	**p_com_split(char *str)
 {
 	int		count;
 	char	**res;
-  if(!str)
-    return NULL;
+
+	if (!str)
+		return (NULL);
 	count = count_checker(str);
 	res = (char **)malloc((count + 1) * sizeof(char *));
 	res = allocate(res, str, count);

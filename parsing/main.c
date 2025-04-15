@@ -40,8 +40,7 @@ char	*get_prompt(void)
 		else
 			last = cwd;
 		snprintf(prompt, sizeof(prompt),
-            "\x1b[1;32m[minishin]: \x1b[32m~%s\x1b[0m ", last);
-
+			"\x1b[1;32m[minishin]: \x1b[32m~%s\x1b[0m ", last);
 	}
 	else
 		snprintf(prompt, sizeof(prompt), "\x1b[1;32m[minihell]:~ \x1b[0m");
@@ -92,7 +91,7 @@ int	main(int ac, char **av, char *envp[])
 		if (*input)
 		{
 			add_history(input);
-			parserlexer(input, envp, env);
+			    parserlexer(input, envp, env);
 			free(input);
 		}
 	}

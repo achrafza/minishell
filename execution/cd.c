@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int cd(char *path, t_env *e)
+int	cd(char *path, t_env *e)
 {
 	if (!path)
 	{
@@ -21,7 +21,7 @@ int cd(char *path, t_env *e)
 			if (e->key && !ft_strcmp(e->key, "HOME") && e->value)
 			{
 				chdir(e->value);
-				break;
+				break ;
 			}
 			e = e->next;
 		}
