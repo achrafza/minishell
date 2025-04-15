@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 20:43:43 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:10:50 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 04:07:43 by dvrk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ int main(int ac, char **av, char *envp[])
     (void)ac;
     (void)av;
     (void)envp;
-	if (!envp || !*envp) 
-	{
-		t_env *new_env = malloc(sizeof(t_env));
-		new_env->key = ft_strdup("PATH");
-		new_env->value = ft_strdup(DEFAULT_PATH); 
-		new_env->next = NULL;
-		env = new_env; 
-	}
-	else
-    	env = env_list_from_array(envp);
+	// if (!envp || !*envp) 
+	// {
+	// 	t_env *new_env = malloc(sizeof(t_env));
+	// 	new_env->key = ft_strdup("PATH");
+	// 	new_env->value = ft_strdup(DEFAULT_PATH); 
+	// 	new_env->next = NULL;
+	// 	env = new_env; 
+	// }
+	// else
+    env = env_list_from_array(envp);
     increment_shlvl(env);
     setup_signals();
     read_history("history.txt");
@@ -85,11 +85,14 @@ int main(int ac, char **av, char *envp[])
         prompt = get_prompt();
         input = readline(prompt);
         free(prompt);
-        if (input == NULL) break;
+        if (!input) 
+            break;
         if (*input)
+        {
             add_history(input);
-        parserlexer(input, envp, env);
-        free(input);
+            parserlexer(input, envp, env);
+            free(input);
+        }
     }
     write(1, "exit\n", 5);
     rl_clear_history();

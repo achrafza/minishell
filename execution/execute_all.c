@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 23:02:51 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 03:56:20 by dvrk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,14 @@ char **envtodoublearr(t_env *e)
 			char *first_part = ft_strjoin(tmp->key, "=");
 			if (!first_part)
 			{
-				free2d(envp);  
+				//free2d(envp);  
 				return NULL;
 			}
 			envp[i] = ft_strjoin(first_part, tmp->value);
 			free(first_part);
 			if (!envp[i])
 			{
-				free2d(envp);
+				//free2d(envp);
 				return NULL;
 			}
 			i++;
@@ -211,7 +211,7 @@ int execute_all(t_comm *coms, char **envp, int size)
     for (int i = 0; i < size; i++)
         waitpid(pids[i], NULL, 0);
     if (envp && *envp)
-      free2d(envp);
+      //free2d(envp);
     envp = NULL;
 
     return 0;

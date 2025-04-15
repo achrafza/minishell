@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parserlexer.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:50:34 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 06:08:29 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 04:19:51 by dvrk             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	parserlexer(char *input, char **envp, t_env *env)
 		envp = envtodoublearr(coms->env);
 	if (size > 0)
 		execute_all(coms,envp,size);
-	free_all_commande(coms, size);
+	//free_all_commande(coms, size);
 	
 	free2d(str);
 	return 0;
