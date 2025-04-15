@@ -43,7 +43,7 @@ char	*joined(char *commande, char *sp)
 	joinedpath = ft_strjoin(sp, com);
 	if (!joinedpath)
 		return (free(com), NULL);
-	return (free(com), joinedpath);
+	return (joinedpath);
 }
 
 char	*find_access(t_comm *com)
