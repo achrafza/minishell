@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 20:43:43 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:10:50 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 00:31:43 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main(int ac, char **av, char *envp[])
 {
 	char	*input;
 	t_env 	*env;
-
 
 	(void)ac;
 	(void)av;

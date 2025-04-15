@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:51:00 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 06:08:08 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 04:33:46 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void				get_full_command(t_comm *com, char *prompt);
 void				fill_inputs(t_comm *com);
 void				fill_outputs(t_comm *com);
 int					ft_isspace(char c);
-void				loader(char *str, t_comm *comm);
-void				push_to_list(t_chars **head, char *str, int typ);
+int	        loader(char *str, t_comm *comm,t_env *env);
+int				push_to_list(t_chars **head, char *str, int typ);
 char				**p_com_split(char *s);
 int					isquote(char c);
 int					is_redirection(char c);

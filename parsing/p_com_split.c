@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:18:10 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/12 03:16:37 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 01:42:44 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,8 @@ char	**p_com_split(char *str)
 {
 	int		count;
 	char	**res;
-
+  if(!str)
+    return NULL;
 	count = count_checker(str);
 	res = (char **)malloc((count + 1) * sizeof(char *));
 	res = allocate(res, str, count);

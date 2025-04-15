@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 08:49:52 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/15 04:33:18 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,20 @@ int	ft_isspace(char c)
 
 /* this pushes a string into a linked list , pretty basic hh*/
 
-void	push_to_list(t_chars **head, char *str, int type)
+int	push_to_list(t_chars **head, char *str, int type)
 {
 	t_chars	*new_node;
 	t_chars	*temp;
 
 	new_node = malloc(sizeof(t_chars));
 	if (!new_node)
-		return ;
+		return 1;
 	new_node->str = str;
 	new_node->type = type;
 	if (!new_node->str)
 	{
 		free(new_node);
-		return ;
+		return 1;
 	}
 	new_node->next = NULL;
 	if (*head == NULL)
@@ -46,6 +46,7 @@ void	push_to_list(t_chars **head, char *str, int type)
 			temp = temp->next;
 		temp->next = new_node;
 	}
+  return 0;
 }
 
 /* gets the whole command and stores it inside t_comm struct ,
@@ -86,16 +87,16 @@ void	setter(t_comm *com)
 int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
   int i =0;
+  int status;
 
 	if (!arr || !com)
 		return -1;
 	setter(com);
-	loader(arr, com);
+	status = loader(arr, com,env);
 	com->env = env;
-	com->p_com = p_com_split(arr);
+  com->p_com = p_com_split(arr);
   while(com->p_com && com->p_com[i])
   {    
-
     com->p_com[i] = parser(com->p_com[i], env);
     i++;
   }

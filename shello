@@ -1,0 +1,12 @@
+Permissions Size User   Date Modified Name
+drwxr-xr-x     - azahid 14 Apr 21:42  .git
+drwxr-xr-x     - azahid 14 Apr 05:04  .vscode
+drwxr-xr-x     - azahid 15 Apr 02:08  execution
+.rw-r--r--  1.3k azahid 15 Apr 02:08  Makefile
+.rwxr-xr-x   75k azahid 15 Apr 02:08  minishell
+.rw-r--r--  4.1k azahid 14 Apr 22:19  minishell.h
+.rw-r--r--  1.5k azahid 14 Apr 22:08  out
+drwxr-xr-x     - azahid 15 Apr 02:08  parsing
+.rw-r--r--  1.5k azahid 14 Apr 05:04  README.md
+.rw-r--r--     0 azahid 15 Apr 02:12  shello
+drwxr-xr-x     - azahid 15 Apr 02:08  utils
