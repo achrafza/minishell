@@ -18,20 +18,16 @@ void	free1d(void *array)
 		free(array);
 }
 
-void	free2d(char **array)
+void	free2d(char **arr)
 {
 	int	i;
 
-	if (array == NULL)
+	if (!arr)
 		return ;
 	i = 0;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		array[i] = NULL;
-		i++;
-	}
-	free(array);
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
 }
 
 void	free_chars(t_chars *list)
@@ -61,21 +57,25 @@ void	free_ints_list(t_ints *head)
 
 void	free_commande(t_comm *com)
 {
+	int	i;
+
 	if (!com)
 		return ;
 	if (com->p_com)
 	{
-		for (int i = 0; com->p_com[i]; i++)
+		for (i = 0; com->p_com[i]; i++)
 			free(com->p_com[i]);
 		free(com->p_com);
 	}
-	// dont free this here for now, it segv when i free it the
-	/*if (com->commande)
-		free(com->commande);*/
+	if (com->commande)
+		free(com->commande);
 	if (com->redirections)
 		free_chars(com->redirections);
 	if (com->heardoc)
+	{
 		free_chars(com->heardoc);
+	}
+	// free(com);
 }
 
 void	free_all_commande(t_comm *comms, int size)

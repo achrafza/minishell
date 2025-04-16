@@ -1,6 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/04/16 03:28:20 by amabbadi          #+#    #+#              #
+#    Updated: 2025/04/16 03:34:44 by amabbadi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = minishell
 CC = cc
-CFLAGS = -g -Wall -Wextra -Werror  -fsanitize=address #-DDEBUG
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address #-DDEBUG #-g 
 RM = rm -f
 
 PARSE_DIR = ./parsing
@@ -23,7 +35,6 @@ SRCS = 						$(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/cd.c\
        $(EXEC_DIR)/unset.c\
        $(EXEC_DIR)/find_access.c \
-       $(EXEC_DIR)/execute.c \
        $(EXEC_DIR)/execute_all.c \
        $(EXEC_DIR)/echo.c \
        $(EXEC_DIR)/shlvl.c \

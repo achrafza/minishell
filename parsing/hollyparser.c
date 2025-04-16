@@ -14,42 +14,83 @@
 
 char	*get_env_value(char *key, t_env *env)
 {
+	if (!key || !env)
+		return ("");
 	while (env)
 	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (env->value);
+		if (env->key && ft_strcmp(env->key, key) == 0)
+			return (env->value ? env->value : "");
 		env = env->next;
 	}
-	return (""); // not found => empty string
+	return (""); // Key not found
+}
+
+static int	get_var_name(const char *wrd, char *var, int max_len, int *var_len)
+{
+	int	vi;
+
+	int i = 1; // Skip $
+	vi = 0;
+	// Special case: $ alone or $ at end
+	if (!wrd[i])
+		return (0);
+	// Handle special variable $?
+	if (wrd[i] == '?')
+	{
+		if (vi < max_len - 1)
+		{
+			var[vi++] = '?';
+			var[vi] = '\0';
+		}
+		*var_len = vi;
+		return (i + 1); // Skip $ and ?
+	}
+	// Extract alphanumeric or _ for variable name
+	while (wrd[i] && (isalnum(wrd[i]) || wrd[i] == '_'))
+	{
+		if (vi < max_len - 1) // Prevent buffer overflow
+			var[vi++] = wrd[i];
+		i++;
+	}
+	var[vi] = '\0';
+	*var_len = vi;
+	return (i);
 }
 
 int	expander_count(char *wrd, t_env *env)
 {
 	char	var[256] = {0};
-	int		vi;
+	int		var_len;
+	int		i;
 	char	*val;
 	int		len;
+		char status_str[12];
 
-	int i = 1; // Start after the $
-	vi = 0;
-	// Extract the variable name (alphanumeric or '_')
-	while (wrd[i] && (isalnum(wrd[i]) || wrd[i] == '_'))
-	{
-		var[vi++] = wrd[i++];
-	}
-	var[vi] = '\0';
-	val = get_env_value(var, env);
-	if (!val)
+	var_len = 0;
+	if (!wrd || wrd[0] != '$' || !env)
 		return (0);
+	// Parse variable name
+	i = get_var_name(wrd, var, 256, &var_len);
+	if (var_len == 0)
+		return (0);
+	// Handle $? specially
+	if (var[0] == '?' && var[1] == '\0')
+	{
+		len = snprintf(status_str, sizeof(status_str), "%d", env->exit_status);
+		return (len);
+	}
+	val = get_env_value(var, env);
 	len = 0;
 	while (val[len])
 		len++;
 	return (len);
 }
+
 int	is_squote(char c)
 {
 	return (c == '\'');
 }
+
 int	is_dquote(char c)
 {
 	return (c == '\"');
@@ -60,6 +101,8 @@ int	has_unbalanced_quotes(char *wrd)
 	int	i = 0, sq = 0, dq;
 
 	i = 0, sq = 0, dq = 0;
+	if (!wrd)
+		return (1);
 	while (wrd[i])
 	{
 		if (wrd[i] == '\'')
@@ -76,14 +119,14 @@ int	handle_squotes(const char *wrd, int *i)
 	int	count;
 
 	count = 0;
-	(*i)++; // skip opening '
+	(*i)++; // Skip opening '
 	while (wrd[*i] && wrd[*i] != '\'')
 	{
 		count++;
 		(*i)++;
 	}
 	if (wrd[*i])
-		(*i)++; // skip closing '
+		(*i)++; // Skip closing '
 	return (count);
 }
 
@@ -92,14 +135,14 @@ int	handle_dquotes(const char *wrd, int *i, t_env *env)
 	int	count;
 
 	count = 0;
-	(*i)++; // skip opening "
+	(*i)++; // Skip opening "
 	while (wrd[*i] && wrd[*i] != '"')
 	{
 		if (wrd[*i] == '$' && wrd[*i + 1])
 		{
 			count += expander_count((char *)(wrd + *i), env);
-			(*i)++; // skip $
-			while (isalnum(wrd[*i]) || wrd[*i] == '_')
+			(*i)++; // Skip $
+			while (isalnum(wrd[*i]) || wrd[*i] == '_' || wrd[*i] == '?')
 				(*i)++;
 		}
 		else
@@ -109,7 +152,7 @@ int	handle_dquotes(const char *wrd, int *i, t_env *env)
 		}
 	}
 	if (wrd[*i])
-		(*i)++; // skip closing "
+		(*i)++;
 	return (count);
 }
 
@@ -120,8 +163,15 @@ int	cw(char *wrd, t_env *env)
 
 	i = 0;
 	count = 0;
+	if (!wrd)
+		return (0);
 	if (has_unbalanced_quotes(wrd))
+	{
+		if (env)
+			env->exit_status = 2;
+		printf("bash: syntax error: unbalanced quotes\n");
 		return (-1);
+	}
 	while (wrd[i])
 	{
 		if (wrd[i] == '\'')
@@ -131,9 +181,9 @@ int	cw(char *wrd, t_env *env)
 		else if (wrd[i] == '$' && wrd[i + 1])
 		{
 			count += expander_count(wrd + i, env);
-			i++;
-			while (isalnum(wrd[i]) || wrd[i] == '_')
-				i++;
+			i++; // Skip $
+			while (isalnum(wrd[i]) || wrd[i] == '_' || wrd[i] == '?')
+				i++; // Skip variable name or ?
 		}
 		else
 		{
@@ -146,21 +196,33 @@ int	cw(char *wrd, t_env *env)
 
 int	expand_variable(char *src, t_env *env, char *dest, int *si)
 {
-	int		i;
 	char	var[256] = {0};
-	int		vi;
+	int		var_len;
+	int		i;
 	char	*val;
 	int		len;
 
-	i = 1;
-	vi = 0;
-	while (src[i] && (isalnum(src[i]) || src[i] == '_'))
-	{
-		var[vi++] = src[i++];
-	}
-	var[vi] = '\0';
-	val = get_env_value(var, env);
+	var_len = 0;
 	len = 0;
+	if (!src || !dest || !env)
+		return (0);
+	// Parse variable name
+	i = get_var_name(src, var, 256, &var_len);
+	if (var_len == 0) // No valid variable
+	{
+		*si += 1; // Skip $
+		return (0);
+	}
+	if (var[0] == '?' && var[1] == '\0')
+	{
+		char status_str[12]; // enough for intmax
+		len = snprintf(status_str, sizeof(status_str), "%d", env->exit_status);
+		for (int j = 0; j < len; j++)
+			dest[j] = status_str[j];
+		*si += 2;
+		return (len);
+	}
+	val = get_env_value(var, env);
 	if (val)
 	{
 		while (val[len])
@@ -169,66 +231,75 @@ int	expand_variable(char *src, t_env *env, char *dest, int *si)
 			len++;
 		}
 	}
-	*si += vi + 1; // skip $ + var name
+	*si += var_len + 1;
 	return (len);
 }
 
 void	fill_word(char *dest, char *src, t_env *env)
 {
-	int si = 0; // src index
-	int di = 0; // dest index
+	int	si;
+	int	di;
+
+	si = 0;
+	di = 0;
+	if (!src || !dest)
+		return ;
 	while (src[si])
 	{
 		if (src[si] == '\'')
 		{
-			si++; // skip opening '
+			si++; // Skip opening '
 			while (src[si] && src[si] != '\'')
 				dest[di++] = src[si++];
 			if (src[si])
-				si++; // skip closing '
+				si++;
 		}
 		else if (src[si] == '"')
 		{
-			si++; // skip opening "
+			si++; // Skip opening "
 			while (src[si] && src[si] != '"')
 			{
 				if (src[si] == '$' && src[si + 1])
-				{
 					di += expand_variable(src + si, env, dest + di, &si);
-				}
 				else
-				{
 					dest[di++] = src[si++];
-				}
 			}
 			if (src[si])
-				si++; // skip closing "
+				si++;
 		}
 		else if (src[si] == '$' && src[si + 1])
-		{
 			di += expand_variable(src + si, env, dest + di, &si);
-		}
 		else
-		{
 			dest[di++] = src[si++];
-		}
 	}
 	dest[di] = '\0';
 }
 
 char	*parser(char *str, t_env *env)
 {
-	int		countw;
-	char	*res;
+	int countw;
+	char *res;
 
 	if (!str)
 		return (NULL);
+	if (str[0] == '\0')
+	{
+		res = ft_strdup("");
+		if (!res && env)
+			env->exit_status = 1;
+		return (res);
+	}
 	countw = cw(str, env);
 	if (countw == -1)
 		return (NULL);
 	res = malloc(sizeof(char) * (countw + 1));
 	if (!res)
+	{
+		if (env)
+			env->exit_status = 1;
+		printf("bash: cannot allocate memory\n");
 		return (NULL);
+	}
 	fill_word(res, str, env);
 	return (res);
 }

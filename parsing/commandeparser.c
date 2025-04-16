@@ -55,22 +55,23 @@ the address is given to a variable inside the struct called "commande"*/
 
 void	get_full_command(t_comm *com, char *prompt)
 {
-	char	*fullcom;
+	t_args	*new;
 
 	if (!prompt || !*prompt)
 	{
 		com->commande = NULL;
 		return ;
 	}
-	fullcom = ft_strdup(prompt);
-	if (!fullcom)
+	new = malloc(sizeof(t_args));
+	if (!new)
 	{
 		com->commande = NULL;
 		return ;
 	}
-	com->commande = fullcom;
+	new->str = ft_split(prompt, ' ');
+	new->next = NULL;
+	com->commande = new;
 }
-
 // sets all values to zero for no problem in pushing elements
 
 void	setter(t_comm *com)
@@ -85,8 +86,9 @@ void	setter(t_comm *com)
 
 int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
-	int	i;
-	int	status;
+	int i;
+	int status;
+	char *tmp;
 
 	i = 0;
 	if (!arr || !com)
@@ -95,9 +97,22 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 	status = loader(arr, com, env);
 	com->env = env;
 	com->p_com = p_com_split(arr);
+	if (!com->p_com)
+	{
+		perror("syntax error");
+		return (1);
+	}
 	while (com->p_com && com->p_com[i])
 	{
-		com->p_com[i] = parser(com->p_com[i], env);
+		tmp = parser(com->p_com[i], env);
+		if (!tmp)
+		{
+			free2d(com->p_com);
+			com->p_com = NULL;
+			return (1);
+		}
+		free(com->p_com[i]);
+		com->p_com[i] = tmp;
 		i++;
 	}
 	if (!com || !com->p_com)
@@ -106,90 +121,30 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 		return (1);
 	}
 	if (check_builtin(com))
+	{
 		com->p_com = createargs(com);
-	com->commande = arr;
+		if (!com->p_com)
+		{
+			free(com->commande);
+			return (1);
+		}
+	}
+
+	com->commande = malloc(sizeof(t_args));
+	if (!com->commande)
+		return (1);
+	com->commande->str = ft_split(arr, ' ');
+	if (!com->commande->str)
+	{
+		free(com->commande);
+		com->commande = NULL;
+		return (1);
+	}
+	com->commande->next = NULL;
+
 	if (DEBUG_MODE)
 		print_t_comm(com);
 	if (DBG_ENV)
 		print_t_env(com);
 	return (0);
 }
-
-/*a function that processes if a redirection is found ,
-	pushes it into a linked list
-that holds strings
-PS : it also ignores if the redirections are quoted
-*/
-/*void	process_redirection(t_comm *com, char *token, int is_input)
-{
-	char	**parts;
-	int		i;
-
-	parts = ft_split(token, ' ');
-	if (!parts)
-		return ;
-	i = 0;
-	while (parts[i])
-	{
-		if (is_input && ft_strcmp(parts[i], "<") == 0)
-		{
-			if (!parts[i + 1])
-			{
-				fprintf(stderr, "Syntax error: no filename after '<'\n");
-				break ;
-			}
-			push_to_list(&com->infile, parts[i + 1], -1);
-			i++;
-		}
-		else if (!is_input && ft_strcmp(parts[i], ">") == 0)
-		{
-			if (!parts[i + 1])
-			{
-				fprintf(stderr, "Syntax error: no filename after '>'\n");
-				break ;
-			}
-			push_to_list(&com->outfile, parts[i + 1], -1);
-			i++;
-		}
-		i++;
-	}
-	// Free parts
-	i = 0;
-	while (parts[i])
-	{
-		free(parts[i]);
-		i++;
-	}
-	free(parts);
-}*/
-
-/*fills the input arg in the comm struct ,
-	only fills the ones with '<' aka input*/
-
-/*void	fill_inputs(t_comm *com)
-{
-	if (!com || !com->p_com)
-		return ;
-	for (int i = 0; com->p_com[i]; i++)
-	{
-		if (ft_strchr(com->p_com[i], '<'))
-		{
-			process_redirection(com, com->p_com[i], 1);
-		}
-	}
-}*/
-
-/*same as above , for outputs*/
-
-// void	fill_outputs(t_comm *com)
-// {
-// 	if (!com || !com->p_com)
-// 		return ;
-// 	for (int i = 0; com->p_com[i]; i++)
-// 	{
-// 		if (ft_strchr(com->p_com[i], '>'))
-// 		{
-// 			process_redirection(com, com->p_com[i], 0);
-// 		}
-// 	}
-// }

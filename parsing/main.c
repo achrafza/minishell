@@ -68,15 +68,6 @@ int	main(int ac, char **av, char *envp[])
 	(void)ac;
 	(void)av;
 	(void)envp;
-	// if (!envp || !*envp)
-	// {
-	// 	t_env *new_env = malloc(sizeof(t_env));
-	// 	new_env->key = ft_strdup("PATH");
-	// 	new_env->value = ft_strdup(DEFAULT_PATH);
-	// 	new_env->next = NULL;
-	// 	env = new_env;
-	// }
-	// else
 	env = env_list_from_array(envp);
 	increment_shlvl(env);
 	setup_signals();
@@ -91,10 +82,11 @@ int	main(int ac, char **av, char *envp[])
 		if (*input)
 		{
 			add_history(input);
-			    parserlexer(input, envp, env);
-			free(input);
+			parserlexer(input, envp, env);
 		}
+		free(input);
 	}
+	free_env(env);
 	write(1, "exit\n", 5);
 	rl_clear_history();
 	return (0);

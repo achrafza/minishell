@@ -29,13 +29,13 @@ int	parserlexer(char *input, char **envp, t_env *env)
 		return (-1);
 	coms = arrayallocator(str, env);
 	if (!coms)
-		return (-1);
+		return (free2d(str), -1);
 	size = double_array_size(str);
 	if (coms && coms->env)
 		envp = envtodoublearr(coms->env);
 	if (size > 0)
 		execute_all(coms, envp, size);
-	// free_all_commande(coms, size);
 	free2d(str);
+	free_all_commande(coms, size);
 	return (0);
 }

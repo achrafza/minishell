@@ -45,24 +45,24 @@ char	*ft_itoa(int n)
 	return (str);
 }
 
-void	increment_shlvl(t_env *env)
+void increment_shlvl(t_env *env)
 {
-	int		shlvl;
-	char	*tmp;
+    int   shlvl;
+    char *tmp;
 
-	while (env)
-	{
-		if (env->key && !strcmp(env->key, "SHLVL"))
-		{
-			shlvl = atoi(env->value);
-			shlvl++;
-			tmp = ft_itoa(shlvl);
-			if (!tmp)
-				return ;
-			free(env->value);
-			env->value = tmp;
-			return ;
-		}
-		env = env->next;
-	}
+    while (env)
+    {
+        if (env->key && !strcmp(env->key, "SHLVL"))
+        {
+            shlvl = atoi(env->value);
+            shlvl++;
+            tmp = ft_itoa(shlvl);
+            if (!tmp)
+                return ;
+            free(env->value);
+            env->value = tmp;
+            return ;
+        }
+        env = env->next;
+    }
 }

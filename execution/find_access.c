@@ -60,12 +60,12 @@ char	*find_access(t_comm *com)
 		if (!joinedpath)
 			return (NULL);
 		if (++i && !(access(joinedpath, F_OK | X_OK)))
-			return (joinedpath);
+			return (free2d(sp), joinedpath);
 		free(joinedpath);
 	}
 	if (com->p_com && !access(com->p_com[0], F_OK | X_OK))
-		return (com->p_com[0]);
-	return (ft_strdup(com->p_com[0]));
+		return (free2d(sp), ft_strdup(com->p_com[0]));
+	return (free2d(sp), NULL);
 }
 
 char	**createargs(t_comm *com)
@@ -74,11 +74,8 @@ char	**createargs(t_comm *com)
 
 	first = find_access(com);
 	if (!first)
-	{
 		return (NULL);
-	}
-	/*5atar : segv*/
-	// free(com->p_com[0]);
+	free(com->p_com[0]);
 	com->p_com[0] = first;
 	return (com->p_com);
 }

@@ -19,6 +19,7 @@
 # include <signal.h>
 # include <stddef.h>
 # include <stdio.h>
+# include <ctype.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <limits.h>
@@ -50,6 +51,7 @@ typedef struct s_env
 	char			*key;
 	char			*value;
 	struct s_env 	*next;
+	int				exit_status;
 }					t_env;
 
 typedef struct s_chars
@@ -59,13 +61,20 @@ typedef struct s_chars
 	int				type;
 }					t_chars;
 
+typedef struct s_args
+{
+	char			**str;
+	struct s_args	*next;
+}					t_args;
+
+
 // struct holding every thing about a single commande after splted by pipe
 typedef struct s_commande
 {
 	// parsed commande with the right attribute;
 	char			**p_com;
 	// commande from the stdin
-	char			*commande;
+	t_args			*commande;
 	t_chars			*redirections;
 	// infile
 	t_chars			*heardoc;
@@ -113,7 +122,7 @@ int 				execute(t_comm *com,char **envp);
 int 				cd(char *path, t_env *e);
 char				*pwd(void);
 int 				unset(t_env **env, char *var);
-int 				echo(char **input);
+int 				echo(t_comm *com);
 void				env(t_comm *cmd);
 int					execute_all(t_comm *coms, char **envp, int size);
 void 				increment_shlvl(t_env *env);
@@ -130,6 +139,7 @@ void				free2d(char **array);
 void				free_commande(t_comm *com);
 void				free_all_commande(t_comm *comms, int size);
 void				free_env(t_env *head);
+void 				free_args(t_args *args);
 
 /*	env   */
 char				**parse_envp(t_env *e);

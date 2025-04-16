@@ -1,5 +1,40 @@
 #include "../minishell.h"
 
+t_env	*create_env_node(char *env_str)
+{
+	t_env	*new_node;
+	char	*ptr_to_tosawi;
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (NULL);
+	new_node->key = NULL;
+	new_node->value = NULL;
+	new_node->exit_status = 0; 
+	new_node->next = NULL;
+	if (!env_str)
+		return (new_node);
+	ptr_to_tosawi = ft_strchr(env_str, '=');
+	if (!ptr_to_tosawi)
+	{
+		new_node->key = ft_strdup(env_str);
+		new_node->value = NULL;
+	}
+	else
+	{
+		new_node->key = ft_strndup(env_str, ptr_to_tosawi - env_str);
+		new_node->value = ft_strdup(ptr_to_tosawi + 1);
+	}
+	if (!new_node->key || (ptr_to_tosawi && !new_node->value))
+	{
+		free(new_node->key);
+		free(new_node->value);
+		free(new_node);
+		return (NULL);
+	}
+	return (new_node);
+}
+
 t_env	*push_env(t_env *head, char **new_env)
 {
 	t_env	*node;
@@ -13,36 +48,6 @@ t_env	*push_env(t_env *head, char **new_env)
 	return (node);
 }
 
-t_env	*create_env_node(char *env_str)
-{
-	t_env	*new_node;
-	char	*ptr_to_tosawi;
-
-	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return (NULL);
-	ptr_to_tosawi = ft_strchr(env_str, '=');
-	if (!ptr_to_tosawi)
-	{
-		new_node->key = ft_strdup(env_str);
-		new_node->value = NULL;
-	}
-	else
-	{
-		new_node->key = strndup(env_str, ptr_to_tosawi - env_str);
-		new_node->value = strdup(ptr_to_tosawi + 1);
-	}
-	if (!new_node->key || (ptr_to_tosawi && !new_node->value))
-	{
-		free(new_node->key);
-		free(new_node->value);
-		free(new_node);
-		return (NULL);
-	}
-	new_node->next = NULL;
-	return (new_node);
-}
-
 t_env	*env_list_from_array(char **env)
 {
 	t_env *head = NULL;
@@ -53,7 +58,10 @@ t_env	*env_list_from_array(char **env)
 	{
 		next = create_env_node(env[i]);
 		if (!next)
-			return (head);
+		{
+			free_env(head);
+			return (NULL);
+		}
 		if (!head)
 			head = next;
 		else
