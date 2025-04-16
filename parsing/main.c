@@ -67,7 +67,6 @@ int	main(int ac, char **av, char *envp[])
 
 	(void)ac;
 	(void)av;
-	(void)envp;
 	env = env_list_from_array(envp);
 	increment_shlvl(env);
 	setup_signals();
