@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:27:54 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 08:16:34 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/16 13:42:00 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,28 @@ char	*find_access(t_comm *com)
 
 	i = 0;
 	sp = parse_envp(com->env);
-	while (sp && sp[i] && com->p_com && com->p_com[0])
+	while (sp && sp[i] && com->p_com && com->p_com->str)
 	{
-		joinedpath = joined(com->p_com[0], sp[i]);
+		joinedpath = joined(com->p_com->str, sp[i]);
 		if (!joinedpath)
 			return (NULL);
 		if (++i && !(access(joinedpath, F_OK | X_OK)))
 			return (free2d(sp), joinedpath);
 		free(joinedpath);
 	}
-	if (com->p_com && !access(com->p_com[0], F_OK | X_OK))
-		return (free2d(sp), ft_strdup(com->p_com[0]));
+	if (com->p_com && !access(com->p_com->str, F_OK | X_OK))
+		return (free2d(sp), ft_strdup(com->p_com->str));
 	return (free2d(sp), NULL);
 }
 
-char	**createargs(t_comm *com)
+char	*createargs(t_comm *com)
 {
 	char	*first;
 
 	first = find_access(com);
 	if (!first)
 		return (NULL);
-	free(com->p_com[0]);
-	com->p_com[0] = first;
-	return (com->p_com);
+	free(com->p_com->str);
+	com->p_com->str = first;
+	return (com->p_com->str);
 }

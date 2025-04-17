@@ -6,7 +6,7 @@
 /*   By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 02:06:07 by amabbadi          #+#    #+#             */
-/*   Updated: 2025/04/14 02:06:07 by amabbadi         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:41:32 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void env(t_comm *cmd)
 {
     t_env *env;
 
-    if (!cmd || !cmd->p_com || !cmd->p_com[0])
+    if (!cmd || !cmd->p_com || !cmd->p_com->str)
         return ;
-    if (cmd->p_com[1])
+    if (cmd->p_com->next)
     {
         printf("env: too many arguments\n");
         return ;

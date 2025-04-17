@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:09:58 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 08:00:53 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/17 08:32:52 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	skip_quoted_section(char *str, int i)
 	return (i);
 }
 
-static int	get_token_end(char *str, int start)
+static int	get_token_end(char *str, int start,int fquotes)
 {
 	int		j;
 	char	quote;
@@ -60,6 +60,7 @@ static int	get_token_end(char *str, int start)
 	j = start;
 	if (isquote(str[j]))
 	{
+    if(str[j]  == '\"') fquotes++;
 		quote = str[j++];
 		while (str[j] && str[j] != quote)
 			j++;
@@ -91,22 +92,35 @@ static int	process_redirection(char *str, int *i, t_comm *comm, t_env *env,
 {
 	int		j;
 	char	*sub;
+  char **parsed;
+  int fquotes = 0;
+  int k = 0;
 
 	if (check_syntax_error(str, *i))
 		return (-1);
 	while (str[*i] && ft_isspace(str[*i]))
 		(*i)++;
-	j = get_token_end(str, *i);
-	if (j > *i)
-	{
-		sub = ft_substr(str, *i, j - *i);
-		if (!sub)
-			return (-1);
-		sub = parser(sub, env);
-		if (!sub)
-			return (-1);
-		push_to_list(&comm->redirections, sub, redir_type);
-	}
+	j = get_token_end(str, *i,fquotes);
+
+  if (j > *i)
+  {
+	  sub = ft_substr(str, *i, j - *i);
+	  if (!sub)
+		  return (-1);
+	  parsed = parser(sub, env,fquotes,redir_type); // expand normally
+
+	  // Add this:
+	  if (redir_type == 2 && fquotes > 0)
+	  {
+		  // heredoc + quoted delimiter → DON'T expand → use sub instead of parsed
+		  push_to_list(&comm->redirections, sub, redir_type);
+	  }
+	  else
+	  {
+		  while (parsed[k])
+			  push_to_list(&comm->redirections, parsed[k++], redir_type);
+	  }
+  }
 	*i = j;
 	return (0);
 }

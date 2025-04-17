@@ -6,7 +6,7 @@
 /*   By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 02:07:00 by amabbadi          #+#    #+#             */
-/*   Updated: 2025/04/14 02:07:01 by amabbadi         ###   ########.fr       */
+/*   Updated: 2025/04/16 19:39:35 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,37 @@ void	free_ints_list(t_ints *head)
 	}
 }
 
+
 void	free_commande(t_comm *com)
 {
-	int	i;
+	t_chars *tmp;
 
 	if (!com)
 		return ;
-	if (com->p_com)
+
+	while (com->p_com)
 	{
-		for (i = 0; com->p_com[i]; i++)
-			free(com->p_com[i]);
+		tmp = com->p_com->next;
+		free(com->p_com->str);
 		free(com->p_com);
+		com->p_com = tmp;
 	}
+
 	if (com->commande)
+	{
+		if (com->commande->str)
+			free2d(com->commande->str); // assuming this frees char**
 		free(com->commande);
+	}
+
 	if (com->redirections)
 		free_chars(com->redirections);
 	if (com->heardoc)
-	{
 		free_chars(com->heardoc);
-	}
-	// free(com);
+
+	// free(com); <-- Uncomment this only if `com` was malloc'd
 }
+
 
 void	free_all_commande(t_comm *comms, int size)
 {

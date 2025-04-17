@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 02:09:12 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 06:26:44 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/17 09:24:24 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int	handle_dquotes(const char *wrd, int *i, t_env *env)
 	return (count);
 }
 
-int	cw(char *wrd, t_env *env)
+int	cw(char *wrd, t_env *env,int type)
 {
 	int	i;
 	int	count;
@@ -174,7 +174,9 @@ int	cw(char *wrd, t_env *env)
 	}
 	while (wrd[i])
 	{
-		if (wrd[i] == '\'')
+    if (type == 2)
+      return ft_strlen(wrd);
+    else if (wrd[i] == '\'')
 			count += handle_squotes(wrd, &i);
 		else if (wrd[i] == '"')
 			count += handle_dquotes(wrd, &i, env);
@@ -235,7 +237,7 @@ int	expand_variable(char *src, t_env *env, char *dest, int *si)
 	return (len);
 }
 
-void	fill_word(char *dest, char *src, t_env *env)
+char	*fill_word(char *dest, char *src, t_env *env,int type)
 {
 	int	si;
 	int	di;
@@ -243,12 +245,20 @@ void	fill_word(char *dest, char *src, t_env *env)
 	si = 0;
 	di = 0;
 	if (!src || !dest)
-		return ;
+		return NULL;
 	while (src[si])
 	{
-		if (src[si] == '\'')
+		if (type == 2)
 		{
-			si++; // Skip opening '
+			if (src[si] == '\'' || src[si] == '"') si++; // Skip opening '
+			while (src[si] && src[si] != '\'' && src[si] != '"')
+				dest[di++] = src[si++];
+			if (src[si])
+				si++;
+		}
+		if (src[si] == '\'' || type == 2)
+		{
+			if (src[si] == '\'') si++; // Skip opening '
 			while (src[si] && src[si] != '\'')
 				dest[di++] = src[si++];
 			if (src[si])
@@ -259,7 +269,7 @@ void	fill_word(char *dest, char *src, t_env *env)
 			si++; // Skip opening "
 			while (src[si] && src[si] != '"')
 			{
-				if (src[si] == '$' && src[si + 1])
+				if (src[si] == '$' && src[si + 1] && type != 2)
 					di += expand_variable(src + si, env, dest + di, &si);
 				else
 					dest[di++] = src[si++];
@@ -273,12 +283,14 @@ void	fill_word(char *dest, char *src, t_env *env)
 			dest[di++] = src[si++];
 	}
 	dest[di] = '\0';
+  return dest;
 }
 
-char	*parser(char *str, t_env *env)
+char	**parser(char *str, t_env *env,int flag, int type)
 {
 	int countw;
 	char *res;
+  char **result;
 
 	if (!str)
 		return (NULL);
@@ -287,9 +299,9 @@ char	*parser(char *str, t_env *env)
 		res = ft_strdup("");
 		if (!res && env)
 			env->exit_status = 1;
-		return (res);
+		return (ft_split(res, 0));
 	}
-	countw = cw(str, env);
+	countw = cw(str, env, type);
 	if (countw == -1)
 		return (NULL);
 	res = malloc(sizeof(char) * (countw + 1));
@@ -300,6 +312,10 @@ char	*parser(char *str, t_env *env)
 		printf("bash: cannot allocate memory\n");
 		return (NULL);
 	}
-	fill_word(res, str, env);
-	return (res);
+	res = fill_word(res, str, env,type);
+  if (flag)
+    result = ft_split(res, ' ');
+  else
+    result = ft_split(res, 0);
+	return (result);
 }

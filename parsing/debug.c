@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 23:54:21 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/14 23:02:07 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/16 18:38:24 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ void	print_t_comm(t_comm *cmd)
 	printf("\033[1;34m===== Command Info =====\033[0m\n");
 	
 	printf("\033[1;32mParsed Command (p_com):\033[0m ");
+  t_chars *s=cmd->p_com;
 	if (cmd->p_com)
 	{
-		for (i = 0; cmd->p_com[i] != NULL; i++)
-			printf("\033[1;33m[%s]%s\033[0m", cmd->p_com[i], cmd->p_com[i + 1] ? " → " : "");
+		for (; s!= NULL; s = s->next)
+			printf("\033[1;33m[%s]%s\033[0m", s->str, s->next ? " → " : "");
 	}
 	else
 		printf("\033[1;31m(empty)\033[0m");

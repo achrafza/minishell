@@ -6,12 +6,11 @@
 /*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 00:50:34 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 04:39:54 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/16 13:00:35 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
 
 /*still unfinished for now , but sets the whole struct to 0 for future calls ,
 	then fills

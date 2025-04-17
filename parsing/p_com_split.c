@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:18:10 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 01:42:44 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/16 15:50:57 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*alloc_word(char *des, int len, char *src)
 	int	i;
 
 	i = 0;
-	while (src[i] && i < len)
+	while (src && src[i] && i < len)
 	{
 		des[i] = src[i];
 		i++;
@@ -136,15 +136,23 @@ char	**allocate(char **arr, char *str, int cc)
 	arr[j] = NULL;
 	return (arr);
 }
-char	**p_com_split(char *str)
+t_chars *p_com_split(char *str)
 {
 	int		count;
 	char	**res;
+  int i = 0;
+  t_chars *s = NULL;
 
 	if (!str)
 		return (NULL);
 	count = count_checker(str);
 	res = (char **)malloc((count + 1) * sizeof(char *));
+  	if (!res) return NULL;
 	res = allocate(res, str, count);
-	return (res);
+  if (!res) return NULL;
+  while(res[i]){
+    push_to_list(&s, ft_strdup(res[i]), -1);
+    i++;}
+  free(res);
+	return (s);
 }

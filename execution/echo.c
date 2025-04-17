@@ -6,61 +6,64 @@
 /*   By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 02:05:43 by amabbadi          #+#    #+#             */
-/*   Updated: 2025/04/14 02:05:45 by amabbadi         ###   ########.fr       */
+/*   Updated: 2025/04/16 13:52:16 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	is_n(const char *str)
+static int is_n(const char *str)
 {
-	int	i;
+    int i;
 
-	if (!str || str[0] != '-')
-		return (0);
-	i = 1;
-	while (str[i])
-	{
-		if (str[i] != 'n')
-			return (0);
-		i++;
-	}
-	return (i > 1);
+    if (!str || str[0] != '-')
+        return (0);
+    i = 1;
+    while (str[i])
+    {
+        if (str[i] != 'n')
+            return (0);
+        i++;
+    }
+    return (i > 1);
 }
 
-int	echo(t_comm *com)
+int echo(t_comm *com)
 {
-	int	i;
-	int	no_nl;
-	int	first;
+    int no_nl;
+    int first;
+    t_chars *p;
 
-	i = 1;
-	no_nl = 0;
-	if (!com || !com->p_com || !com->p_com[0])
-	{
-		if (com && com->env)
-			com->env->exit_status = 0;
-		printf("\n");
-		return (0);
-	}
-	while (com->p_com[i] && is_n(com->p_com[i]))
-	{
-		no_nl = 1;
-		i++;
-	}
-	first = 1;
-	while (com->p_com[i])
-	{
-		if (!first)
-			printf(" ");
-		if (com->p_com[i])
-			printf("%s", com->p_com[i]);
-		first = 0;
-		i++;
-	}
-	if (!no_nl)
-		printf("\n");
-	if (com && com->env)
-		com->env->exit_status = 0;
-	return (0);
+    if (!com || !com->p_com)
+    {
+        if (com && com->env)
+            com->env->exit_status = 0;
+        printf("\n");
+        return (0);
+    }
+
+    no_nl = 0;
+    p = com->p_com->next;
+    // Skip all -n flags
+    while (p && p->str && is_n(p->str))
+    {
+        no_nl = 1;
+        p = p->next;
+    }
+
+    first = 1;
+    while (p && p->str)
+    {
+        if (!first)
+            printf(" ");
+        printf("%s", p->str);
+        first = 0;
+        p = p->next;
+    }
+
+    if (!no_nl)
+        printf("\n");
+    if (com && com->env)
+        com->env->exit_status = 0;
+    return (0);
 }

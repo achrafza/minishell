@@ -6,13 +6,13 @@
 #    By: amabbadi <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/16 03:28:20 by amabbadi          #+#    #+#              #
-#    Updated: 2025/04/16 03:34:44 by amabbadi         ###   ########.fr        #
+#    Updated: 2025/04/17 12:54:48 by amabbadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  #-DDEBUG #-fsanitize=address  #-g 
+CFLAGS = -Wall -Wextra -Werror -g #-DDEBUG -fsanitize=address  #-g 
 RM = rm -f
 
 PARSE_DIR = ./parsing
@@ -38,6 +38,8 @@ SRCS = 						$(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/execute_all.c \
        $(EXEC_DIR)/echo.c \
        $(EXEC_DIR)/shlvl.c \
+       $(EXEC_DIR)/export.c \
+			 $(EXEC_DIR)/redirections.c\
        						$(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\

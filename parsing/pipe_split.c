@@ -52,6 +52,8 @@ char	**pipe_split(char *str)
 	i = 0, start = 0, part = 0;
 	total = counter(str);
 	result = malloc((total + 1) * sizeof(char *));
+	if (!result)
+		return (NULL);
 	while (str[i])
 	{
 		if (isquote(str[i]))

@@ -6,11 +6,12 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 04:33:18 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/17 08:36:06 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <stdio.h>
 
 /* this checks for spaces in a character , pretty basic*/
 int	ft_isspace(char c)
@@ -81,14 +82,21 @@ void	setter(t_comm *com)
 	com->heardoc = NULL;
 	com->redirections = NULL;
 	com->env = NULL;
+  com->infile = -1;
+  com->outfile = -1;
 }
 /*splits the commands into multiple chunks using the pipes*/
 
+
+
 int	commandeparser(char *arr, t_comm *com, t_env *env)
 {
-	int i;
-	int status;
-	char *tmp;
+	int		i;
+	int		status;
+	char	**tmp;
+	t_chars	*curr;
+	t_chars	*prev;
+	t_chars	*nxt;
 
 	i = 0;
 	if (!arr || !com)
@@ -97,24 +105,79 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 	status = loader(arr, com, env);
 	com->env = env;
 	com->p_com = p_com_split(arr);
-	if (!com->p_com)
+	if (!com->p_com || !com->p_com->str)
 	{
 		perror("syntax error");
 		return (1);
 	}
-	while (com->p_com && com->p_com[i])
+	curr = com->p_com;
+	prev = NULL;
+
+	while (curr)
 	{
-		tmp = parser(com->p_com[i], env);
+		if (curr->str[0] == '\"')
+			tmp = parser(curr->str, env, 0,0);
+		else
+			tmp = parser(curr->str, env, 1,0);
 		if (!tmp)
 		{
-			free2d(com->p_com);
+			free_chars(com->p_com);
 			com->p_com = NULL;
 			return (1);
 		}
-		free(com->p_com[i]);
-		com->p_com[i] = tmp;
-		i++;
+		nxt = curr->next;  // Save the next node
+		free(curr->str);
+		curr->str = NULL;
+
+		t_chars *new_head = NULL;
+		t_chars *new_tail = NULL;
+
+		// Build new mini-list from tmp[]
+		for (int j = 0; tmp[j]; j++)
+		{
+			t_chars *new_node = malloc(sizeof(t_chars));
+			if (!new_node)
+			{
+				free2d(tmp);
+				free_chars(com->p_com);
+				return (1);
+			}
+			new_node->str = ft_strdup(tmp[j]);
+			new_node->type = curr->type;
+			new_node->next = NULL;
+
+			if (!new_node->str)
+			{
+				free(new_node);
+				free2d(tmp);
+				free_chars(com->p_com);
+				return (1);
+			}
+
+			if (!new_head)
+			{
+				new_head = new_node;
+				new_tail = new_node;
+			}
+			else
+			{
+				new_tail->next = new_node;
+				new_tail = new_node;
+			}
+		}
+		// Stitch the new list into the original one
+		if (!prev)
+			com->p_com = new_head;
+		else
+			prev->next = new_head;
+		if (new_tail)
+			new_tail->next = nxt;
+		free(curr); // free the original current node
+		curr = nxt;
+		prev = new_tail;
+		free2d(tmp);
 	}
+
 	if (!com || !com->p_com)
 	{
 		perror("syntax error");
@@ -122,14 +185,13 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 	}
 	if (check_builtin(com))
 	{
-		com->p_com = createargs(com);
+		com->p_com->str = createargs(com);
 		if (!com->p_com)
 		{
 			free(com->commande);
 			return (1);
 		}
 	}
-
 	com->commande = malloc(sizeof(t_args));
 	if (!com->commande)
 		return (1);
@@ -141,10 +203,6 @@ int	commandeparser(char *arr, t_comm *com, t_env *env)
 		return (1);
 	}
 	com->commande->next = NULL;
-
-	if (DEBUG_MODE)
-		print_t_comm(com);
-	if (DBG_ENV)
-		print_t_env(com);
 	return (0);
 }
+

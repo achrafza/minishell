@@ -6,11 +6,12 @@
 /*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 03:56:20 by dvrk             ###   ########.fr       */
+/*   Updated: 2025/04/17 10:24:41 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -22,9 +23,9 @@ void exit_prog(t_comm *com)
     if (env)
         status = env->exit_status;
 
-    if (com && com->p_com && com->p_com[1])
+    if (com && com->p_com && com->p_com->next)
     {
-        char *arg = com->p_com[1];
+        char *arg = com->p_com->next->str;
         int i = 0;
         if (arg[0] == '-')
             i++;
@@ -94,13 +95,13 @@ int exec_builtin(t_comm *com)
 {
     char *path;
 
-    if (!com || !com->p_com || !com->p_com[0])
+    if (!com || !com->p_com || !com->p_com->str)
     {
         if (com && com->env)
             com->env->exit_status = 1;
         return (1);
     }
-    if (!ft_strcmp(com->p_com[0], "pwd"))
+    if (!ft_strcmp(com->p_com->str, "pwd"))
     {
         path = pwd();
         if (!path)
@@ -114,24 +115,24 @@ int exec_builtin(t_comm *com)
         com->env->exit_status = 0;
         return (0);
     }
-    else if (!ft_strcmp(com->p_com[0], "exit"))
+    else if (!ft_strcmp(com->p_com->str, "exit"))
     {
         exit_prog(com);
         return (0);
     }
-    else if (!ft_strcmp(com->p_com[0], "unset"))
+    else if (!ft_strcmp(com->p_com->str, "unset"))
     {
-        if (!com->p_com[1])
+        if (!com->p_com->next->str)
         {
             printf("minishell: unset: not enough arguments\n");
             com->env->exit_status = 1;
             return (1);
         }
-        int ret = unset(&com->env, com->p_com[1]);
+        int ret = unset(&com->env, com->p_com->next->str);
         com->env->exit_status = ret;
         return (ret);
     }
-    else if (!ft_strcmp(com->p_com[0], "cd"))
+    else if (!ft_strcmp(com->p_com->str, "cd"))
     {
         char *path = com->commande && com->commande->str ? com->commande->str[1] : NULL;
         int ret = cd(path, com->env);
@@ -140,22 +141,24 @@ int exec_builtin(t_comm *com)
         com->env->exit_status = ret;
         return (ret);
     }
-    else if (!ft_strcmp(com->p_com[0], "echo"))
+    else if (!ft_strcmp(com->p_com->str, "echo"))
     {
         int ret = echo(com);
         com->env->exit_status = ret;
         return (ret);
     }
-    else if (!ft_strcmp(com->p_com[0], "env"))
+    else if (!ft_strcmp(com->p_com->str, "env"))
     {
         env(com);
         com->env->exit_status = 0;
         return (0);
     }
-    else if (!ft_strcmp(com->p_com[0], "export"))
+    else if (!ft_strcmp(com->p_com->str, "export"))
     {
-        printf("minishell: export: not implemented\n");
-        com->env->exit_status = 1;
+        if (com->p_com->next)
+            export(com->p_com->next->str, com->env);
+        else
+            export(NULL, com->env);
         return (1);
     }
     com->env->exit_status = 1;
@@ -164,21 +167,21 @@ int exec_builtin(t_comm *com)
 
 int check_builtin(t_comm *com)
 {
-    if (!com || !com->p_com || !com->p_com[0])
+    if (!com || !com->p_com || !com->p_com->str)
         return (1);
-    if (!ft_strcmp(com->p_com[0], "pwd"))
+    if (!ft_strcmp(com->p_com->str, "pwd"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "exit"))
+    else if (!ft_strcmp(com->p_com->str, "exit"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "unset"))
+    else if (!ft_strcmp(com->p_com->str, "unset"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "cd"))
+    else if (!ft_strcmp(com->p_com->str, "cd"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "echo"))
+    else if (!ft_strcmp(com->p_com->str, "echo"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "env"))
+    else if (!ft_strcmp(com->p_com->str, "env"))
         return (0);
-    else if (!ft_strcmp(com->p_com[0], "export"))
+    else if (!ft_strcmp(com->p_com->str, "export"))
         return (0);
     return (1);
 }
@@ -232,6 +235,33 @@ char **envtodoublearr(t_env *e)
     return (envp);
 }
 
+char	**list_to_array(t_chars *list)
+{
+	int		size;
+	int		i;
+	char	**array;
+
+	size = 0;
+	t_chars *tmp = list;
+	while (tmp)
+	{
+		size++;
+		tmp = tmp->next;
+	}
+	array = malloc(sizeof(char *) * (size + 1));
+	if (!array)
+		return (NULL);
+	i = 0;
+  t_chars *tt = list;
+	while (tt)
+	{
+		array[i] = ft_strdup(tt->str); // don't strdup to avoid leaks (share same ptr)
+		i++;
+		tt = tt->next;
+	}
+	array[i] = NULL;
+	return (array);
+}
 int execute_all(t_comm *coms, char **envp, int size)
 {
     if (!coms || size <= 0)
@@ -269,7 +299,7 @@ int execute_all(t_comm *coms, char **envp, int size)
 
     i = 0;
     while (i < size)
-    {
+    { 
         pids[i] = fork();
         if (pids[i] == -1)
         {
@@ -283,13 +313,21 @@ int execute_all(t_comm *coms, char **envp, int size)
         }
         if (pids[i] == 0)
         {
-            if (i > 0)
+            int in = 0,out = 0;
+            if(handle_redirections(coms,i,&in,&out) != 0)
+            {
+              free2d(envp);
+              perror("failed in redirection");
+              exit(1);
+            }
+            if (i > 0 && !in)
                 dup2(pipes[(i - 1) * 2], 0);
-            if (i < size - 1)
+            if (i < size - 1 && !out)
                 dup2(pipes[i * 2 + 1], 1);
             for (int j = 0; j < 2 * (size - 1); j++)
                 close(pipes[j]);
-            if (!coms[i].p_com || !coms[i].p_com[0])
+            char **exec =  list_to_array(coms[i].p_com);
+            if (!exec || !exec[0])
             {
                 printf("minishell: command not found\n");
                 if (coms[i].env)
@@ -305,8 +343,8 @@ int execute_all(t_comm *coms, char **envp, int size)
             }
             else
             {
-                execve(coms[i].p_com[0], coms[i].p_com, envp);
-                printf("minishell: %s: command not found\n", coms[i].p_com[0]);
+                execve(exec[0], exec, envp);
+                printf("minishell: %s: command not found\n", coms[i].p_com->str);
                 if (coms[i].env)
                     coms[i].env->exit_status = 127;
                 free2d(envp);

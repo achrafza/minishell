@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 01:26:38 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/15 01:41:02 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/16 12:02:58 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ t_comm	*arrayallocator(char **arr, t_env *env)
 	while (arr[i])
 	{
 		commandeparser(arr[i], &comms[i], env);
+	  if (DEBUG_MODE)
+		  print_t_comm(&comms[i]);
+	  if (DBG_ENV)
+		  print_t_env(&comms[i]);
 		i++;
 	}
 	// Ensure the last element is properly null-terminated if required
