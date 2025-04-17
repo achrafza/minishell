@@ -12,58 +12,58 @@
 
 #include "../minishell.h"
 
-static int is_n(const char *str)
+static int	is_n(const char *str)
 {
-    int i;
+	int	i;
 
-    if (!str || str[0] != '-')
-        return (0);
-    i = 1;
-    while (str[i])
-    {
-        if (str[i] != 'n')
-            return (0);
-        i++;
-    }
-    return (i > 1);
+	if (!str || str[0] != '-')
+		return (0);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (i > 1);
 }
 
-int echo(t_comm *com)
+int	echo(t_comm *com)
 {
-    int no_nl;
-    int first;
-    t_chars *p;
+	int no_nl;
+	int first;
+	t_chars *p;
 
-    if (!com || !com->p_com)
-    {
-        if (com && com->env)
-            com->env->exit_status = 0;
-        printf("\n");
-        return (0);
-    }
+	if (!com || !com->p_com)
+	{
+		if (com && com->env)
+			com->env->exit_status = 0;
+		printf("\n");
+		return (0);
+	}
 
-    no_nl = 0;
-    p = com->p_com->next;
-    // Skip all -n flags
-    while (p && p->str && is_n(p->str))
-    {
-        no_nl = 1;
-        p = p->next;
-    }
+	no_nl = 0;
+	p = com->p_com->next;
+	// Skip all -n flags
+	while (p && p->str && is_n(p->str))
+	{
+		no_nl = 1;
+		p = p->next;
+	}
 
-    first = 1;
-    while (p && p->str)
-    {
-        if (!first)
-            printf(" ");
-        printf("%s", p->str);
-        first = 0;
-        p = p->next;
-    }
+	first = 1;
+	while (p && p->str)
+	{
+		if (!first)
+			printf(" ");
+		printf("%s", p->str);
+		first = 0;
+		p = p->next;
+	}
 
-    if (!no_nl)
-        printf("\n");
-    if (com && com->env)
-        com->env->exit_status = 0;
-    return (0);
+	if (!no_nl)
+		printf("\n");
+	if (com && com->env)
+		com->env->exit_status = 0;
+	return (0);
 }

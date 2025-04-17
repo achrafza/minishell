@@ -24,6 +24,7 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include <unistd.h>
+#include <dirent.h>
 
 # define DEFAULT_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
@@ -120,6 +121,7 @@ char				**pipe_split(char *str);
 char				**parser(char *str, t_env *env, int flag, int type);
 int					handle_redirections(t_comm *com, int i, int *redir_in,
 						int *redir_out);
+t_chars *parse_wildcards(char *wildin, t_comm *com);
 
 /*			Execution			*/
 

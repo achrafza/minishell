@@ -64,6 +64,7 @@ int	main(int ac, char **av, char *envp[])
 	char *input;
 	t_env *env;
 	char *prompt;
+	int status;
 
 	(void)ac;
 	(void)av;
@@ -84,9 +85,11 @@ int	main(int ac, char **av, char *envp[])
 			parserlexer(input, envp, env);
 		}
 		free(input);
+		if (env)
+			status = env->exit_status;
 	}
 	free_env(env);
 	write(1, "exit\n", 5);
 	rl_clear_history();
-	return (0);
+	return (status);
 }

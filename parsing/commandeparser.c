@@ -82,18 +82,17 @@ void	setter(t_comm *com)
 	com->heardoc = NULL;
 	com->redirections = NULL;
 	com->env = NULL;
-  com->infile = -1;
-  com->outfile = -1;
+	com->infile = -1;
+	com->outfile = -1;
 }
 /*splits the commands into multiple chunks using the pipes*/
-
-
 
 int commandeparser(char *arr, t_comm *com, t_env *env)
 {
     int status;
     char **tmp;
     t_chars *curr, *prev, *nxt;
+    t_chars *wildcard_curr, *wildcard_prev, *expanded_nodes, *last_expanded;
 
     if (!arr || !com)
         return (-1);
@@ -108,12 +107,53 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
         com->p_com = NULL;
         return (1);
     }
+
+    // Handle wildcards in com->p_com
+    wildcard_curr = com->p_com;
+    wildcard_prev = NULL;
+    while (wildcard_curr)
+    {
+        if (ft_strchr(wildcard_curr->str, '*') || ft_strchr(wildcard_curr->str, '?'))
+        {
+            t_chars *next = wildcard_curr->next;
+            expanded_nodes = parse_wildcards(wildcard_curr->str, com);
+            if (!expanded_nodes)
+            {
+                free_chars(com->p_com);
+                com->p_com = NULL;
+                return (1);
+            }
+
+            // Find the last node in expanded_nodes
+            last_expanded = expanded_nodes;
+            while (last_expanded->next)
+                last_expanded = last_expanded->next;
+
+            // Insert expanded nodes in place of wildcard node
+            if (wildcard_prev)
+                wildcard_prev->next = expanded_nodes;
+            else
+                com->p_com = expanded_nodes;
+            last_expanded->next = next;
+            free(wildcard_curr->str);
+            free(wildcard_curr);
+            wildcard_curr = next;
+
+            wildcard_prev = last_expanded;
+        }
+        else
+        {
+            wildcard_prev = wildcard_curr;
+            wildcard_curr = wildcard_curr->next;
+        }
+    }
+
+    // Existing variable expansion loop
     curr = com->p_com;
     prev = NULL;
-
     while (curr)
     {
-        if (!curr->str) // Fix: Check for NULL curr->str
+        if (!curr->str)
         {
             free_chars(com->p_com);
             com->p_com = NULL;
@@ -129,7 +169,7 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
             com->p_com = NULL;
             return (1);
         }
-        nxt = curr->next; 
+        nxt = curr->next;
         free(curr->str);
         curr->str = NULL;
 
@@ -176,18 +216,18 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
             prev->next = new_head;
         if (new_tail)
             new_tail->next = nxt;
-        else if (prev) 
+        else if (prev)
             prev->next = nxt;
-        free(curr); 
+        free(curr);
         curr = nxt;
-        prev = new_tail ? new_tail : prev; 
+        prev = new_tail ? new_tail : prev;
         free2d(tmp);
     }
 
     if (!com || !com->p_com)
     {
         perror("syntax error");
-        free_chars(com->p_com); 
+        free_chars(com->p_com);
         com->p_com = NULL;
         return (1);
     }
@@ -198,7 +238,7 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
         {
             free_chars(com->p_com);
             com->p_com = NULL;
-            free(com->commande); 
+            free(com->commande);
             com->commande = NULL;
             return (1);
         }

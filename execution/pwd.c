@@ -12,15 +12,15 @@
 
 #include "../minishell.h"
 
-char *pwd(void)
+char	*pwd(void)
 {
-    char buff[PATH_MAX];
-    char *path;
+	char buff[PATH_MAX];
+	char *path;
 
-    if (!getcwd(buff, sizeof(buff)))
-        return (NULL);
-    path = ft_strdup(buff);
-    if (!path)
-        return (NULL);
-    return (path);
+	if (!getcwd(buff, sizeof(buff)))
+		return (NULL);
+	path = ft_strdup(buff);
+	if (!path)
+		return (NULL);
+	return (path);
 }

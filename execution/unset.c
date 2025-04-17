@@ -12,32 +12,32 @@
 
 #include "../minishell.h"
 
-int unset(t_env **env, char *var)
+int	unset(t_env **env, char *var)
 {
-    t_env *curr;
-    t_env *prev;
+	t_env *curr;
+	t_env *prev;
 
-    if (!env || !var || !*var)
-        return (1);
-    
-    curr = *env;
-    prev = NULL;
-    
-    while (curr)
-    {
-        if (curr->key && !ft_strcmp(curr->key, var))
-        {
-            if (prev)
-                prev->next = curr->next;
-            else
-                *env = curr->next;
-            free(curr->key);
-            free(curr->value);
-            free(curr);
-            return (0);
-        }
-        prev = curr;
-        curr = curr->next;
-    }
-    return (1);
+	if (!env || !var || !*var)
+		return (1);
+
+	curr = *env;
+	prev = NULL;
+
+	while (curr)
+	{
+		if (curr->key && !ft_strcmp(curr->key, var))
+		{
+			if (prev)
+				prev->next = curr->next;
+			else
+				*env = curr->next;
+			free(curr->key);
+			free(curr->value);
+			free(curr);
+			return (0);
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+	return (1);
 }

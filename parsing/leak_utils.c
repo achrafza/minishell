@@ -55,14 +55,12 @@ void	free_ints_list(t_ints *head)
 	}
 }
 
-
 void	free_commande(t_comm *com)
 {
-	t_chars *tmp;
+	t_chars	*tmp;
 
 	if (!com)
 		return ;
-
 	while (com->p_com)
 	{
 		tmp = com->p_com->next;
@@ -70,22 +68,18 @@ void	free_commande(t_comm *com)
 		free(com->p_com);
 		com->p_com = tmp;
 	}
-
 	if (com->commande)
 	{
 		if (com->commande->str)
 			free2d(com->commande->str); // assuming this frees char**
 		free(com->commande);
 	}
-
 	if (com->redirections)
 		free_chars(com->redirections);
 	if (com->heardoc)
 		free_chars(com->heardoc);
-
 	// free(com); <-- Uncomment this only if `com` was malloc'd
 }
-
 
 void	free_all_commande(t_comm *comms, int size)
 {

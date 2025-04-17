@@ -136,25 +136,29 @@ char	**allocate(char **arr, char *str, int cc)
 	arr[j] = NULL;
 	return (arr);
 }
-t_chars *p_com_split(char *str)
+t_chars	*p_com_split(char *str)
 {
 	int		count;
 	char	**res;
-  int i = 0;
-  t_chars *s = NULL;
+	int		i;
+	t_chars	*s;
 
+	i = 0;
+	s = NULL;
 	if (!str)
 		return (NULL);
 	count = count_checker(str);
 	res = (char **)malloc((count + 1) * sizeof(char *));
-  	if (!res) return NULL;
+	if (!res)
+		return (NULL);
 	res = allocate(res, str, count);
-  	if (!res) return NULL;
-	while(res[i])
+	if (!res)
+		return (NULL);
+	while (res[i])
 	{
-    	push_to_list(&s, ft_strdup(res[i]), -1);
+		push_to_list(&s, ft_strdup(res[i]), -1);
 		i++;
 	}
-  	free2d(res);
+	free2d(res);
 	return (s);
 }

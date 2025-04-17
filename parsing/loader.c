@@ -52,7 +52,7 @@ static int	skip_quoted_section(char *str, int i)
 	return (i);
 }
 
-static int	get_token_end(char *str, int start,int fquotes)
+static int	get_token_end(char *str, int start, int fquotes)
 {
 	int		j;
 	char	quote;
@@ -60,7 +60,8 @@ static int	get_token_end(char *str, int start,int fquotes)
 	j = start;
 	if (isquote(str[j]))
 	{
-    if(str[j]  == '\"') fquotes++;
+		if (str[j] == '\"')
+			fquotes++;
 		quote = str[j++];
 		while (str[j] && str[j] != quote)
 			j++;
@@ -87,52 +88,53 @@ static int	check_syntax_error(char *str, int i)
 	return (0);
 }
 
-static int process_redirection(char *str, int *i, t_comm *comm, t_env *env, int redir_type)
+static int	process_redirection(char *str, int *i, t_comm *comm, t_env *env,
+		int redir_type)
 {
-    int     j;
-    char    *sub;
-    char    **parsed;
-    int     fquotes = 0;
-    int     k = 0;
+	int		j;
+	char	*sub;
+	char	**parsed;
+	int		fquotes;
+	int		k;
 
-    if (check_syntax_error(str, *i))
-        return (-1);
-    while (str[*i] && ft_isspace(str[*i]))
-        (*i)++;
-    j = get_token_end(str, *i, fquotes);
-
-    if (j > *i)
-    {
-        sub = ft_substr(str, *i, j - *i);
-        if (!sub)
-            return (-1);
-        parsed = parser(sub, env, fquotes, redir_type); // expand normally
-        if (!parsed)
-        {
-            free(sub);
-            return (-1);
-        }
-
-        if (redir_type == 2 && fquotes > 0)
-        {
-            push_to_list(&comm->redirections, sub, redir_type);
-        }
-        else
-        {
-            while (parsed[k])
-                push_to_list(&comm->redirections, parsed[k++], redir_type);
-            free(sub);
-        }
-        free(parsed); 
-    }
-    *i = j;
-    return (0);
+	fquotes = 0;
+	k = 0;
+	if (check_syntax_error(str, *i))
+		return (-1);
+	while (str[*i] && ft_isspace(str[*i]))
+		(*i)++;
+	j = get_token_end(str, *i, fquotes);
+	if (j > *i)
+	{
+		sub = ft_substr(str, *i, j - *i);
+		if (!sub)
+			return (-1);
+		parsed = parser(sub, env, fquotes, redir_type); // expand normally
+		if (!parsed)
+		{
+			free(sub);
+			return (-1);
+		}
+		if (redir_type == 2 && fquotes > 0)
+		{
+			push_to_list(&comm->redirections, sub, redir_type);
+		}
+		else
+		{
+			while (parsed[k])
+				push_to_list(&comm->redirections, parsed[k++], redir_type);
+			free(sub);
+		}
+		free(parsed);
+	}
+	*i = j;
+	return (0);
 }
 
 int	loader(char *str, t_comm *comm, t_env *env)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	(void)(env);
 	i = 0;

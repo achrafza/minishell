@@ -10,7 +10,7 @@ t_env	*create_env_node(char *env_str)
 		return (NULL);
 	new_node->key = NULL;
 	new_node->value = NULL;
-	new_node->exit_status = 0; 
+	new_node->exit_status = 0;
 	new_node->next = NULL;
 	if (!env_str)
 		return (new_node);

@@ -12,7 +12,7 @@
 
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address  #-g 
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address  #-g 
 RM = rm -f
 
 PARSE_DIR = ./parsing
@@ -25,10 +25,11 @@ SRCS = 						$(PARSE_DIR)/arrayallocator.c \
        $(PARSE_DIR)/parserlexer.c\
        $(PARSE_DIR)/debug.c\
        $(PARSE_DIR)/loader.c\
-				$(PARSE_DIR)/p_com_split.c\
+	$(PARSE_DIR)/p_com_split.c\
        $(PARSE_DIR)/leak_utils.c\
-			 $(PARSE_DIR)/pipe_split.c\
-			 $(PARSE_DIR)/hollyparser.c\
+	$(PARSE_DIR)/pipe_split.c\
+	$(PARSE_DIR)/hollyparser.c\
+	$(PARSE_DIR)/wildcards.c\
        						$(EXEC_DIR)/env.c\
        $(EXEC_DIR)/env_utils.c\
        $(EXEC_DIR)/pwd.c\
@@ -39,7 +40,7 @@ SRCS = 						$(PARSE_DIR)/arrayallocator.c \
        $(EXEC_DIR)/echo.c \
        $(EXEC_DIR)/shlvl.c \
        $(EXEC_DIR)/export.c \
-			 $(EXEC_DIR)/redirections.c\
+	$(EXEC_DIR)/redirections.c\
        						$(UTILS_DIR)/ft_strcmp.c\
        $(UTILS_DIR)/ft_strchr.c\
        $(UTILS_DIR)/ft_memset.c\
@@ -57,6 +58,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
+
 %.o: %.c minishell.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -68,4 +70,4 @@ fclean: clean
 
 re: fclean all 
 
-.PHONY: all clean fclean re
+.PHONY: clean
