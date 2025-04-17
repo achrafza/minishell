@@ -1,0 +1,15 @@
+total 124
+ 0 drwxr-xr-x 7 amabbadi 2024_khouribga   177 Apr 17 17:23 .
+ 0 drwxr-xr-x 4 amabbadi 2024_khouribga    37 Apr 17 14:26 ..
+ 0 drwxr-xr-x 2 amabbadi 2024_khouribga   187 Apr 17 17:23 execution
+ 0 drwxr-xr-x 8 amabbadi 2024_khouribga   185 Apr 17 17:08 .git
+ 4 -rw-r--r-- 1 amabbadi 2024_khouribga   919 Apr 17 17:19 h1
+ 4 -rw-r--r-- 1 amabbadi 2024_khouribga    71 Apr 17 17:19 h2
+ 0 -rw-r--r-- 1 amabbadi 2024_khouribga     0 Apr 17 17:23 in
+ 4 -rw-r--r-- 1 amabbadi 2024_khouribga  2268 Apr 17 17:23 Makefile
+96 -rwxr-xr-x 1 amabbadi 2024_khouribga 97680 Apr 17 17:23 minishell
+ 8 -rw-r--r-- 1 amabbadi 2024_khouribga  4677 Apr 17 16:40 minishell.h
+ 4 drwxr-xr-x 2 amabbadi 2024_khouribga  4096 Apr 17 17:23 parsing
+ 4 -rw-r--r-- 1 amabbadi 2024_khouribga  1464 Apr 17 14:25 README.md
+ 0 drwxr-xr-x 2 amabbadi 2024_khouribga   160 Apr 17 17:23 utils
+ 0 drwxr-xr-x 2 amabbadi 2024_khouribga    27 Apr 17 14:25 .vscode
