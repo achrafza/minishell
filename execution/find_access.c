@@ -41,31 +41,45 @@ char	*joined(char *commande, char *sp)
 	if (!com)
 		return (NULL);
 	joinedpath = ft_strjoin(sp, com);
+	free(com);
 	if (!joinedpath)
 		return (NULL);
 	return (joinedpath);
 }
 
-char	*find_access(t_comm *com)
+char *find_access(t_comm *com)
 {
-	char	**sp;
-	char	*joinedpath;
-	int		i;
+    char **sp;
+    char *joinedpath;
+    int i;
 
-	i = 0;
-	sp = parse_envp(com->env);
-	while (sp && sp[i] && com->p_com && com->p_com->str)
-	{
-		joinedpath = joined(com->p_com->str, sp[i]);
-		if (!joinedpath)
-			return (NULL);
-		if (++i && !(access(joinedpath, F_OK | X_OK)))
-			return (free2d(sp), joinedpath);
-		free(joinedpath);
-	}
-	if (com->p_com && !access(com->p_com->str, F_OK | X_OK))
-		return (free2d(sp), ft_strdup(com->p_com->str));
-	return (free2d(sp), NULL);
+    i = 0;
+    sp = parse_envp(com->env);
+    if (!sp && com->p_com && !access(com->p_com->str, F_OK | X_OK))
+        return (ft_strdup(com->p_com->str));
+    while (sp && sp[i] && com->p_com && com->p_com->str)
+    {
+        joinedpath = joined(com->p_com->str, sp[i]);
+        if (!joinedpath)
+        {
+            free2d(sp);
+            return (NULL);
+        }
+        if (!access(joinedpath, F_OK | X_OK))
+        {
+            free2d(sp);
+            return (joinedpath);
+        }
+        free(joinedpath);
+        i++;
+    }
+    if (com->p_com && !access(com->p_com->str, F_OK | X_OK))
+    {
+        free2d(sp);
+        return (ft_strdup(com->p_com->str));
+    }
+    free2d(sp);
+    return (NULL);
 }
 
 char	*createargs(t_comm *com)

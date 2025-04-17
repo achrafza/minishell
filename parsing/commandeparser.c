@@ -89,120 +89,137 @@ void	setter(t_comm *com)
 
 
 
-int	commandeparser(char *arr, t_comm *com, t_env *env)
+int commandeparser(char *arr, t_comm *com, t_env *env)
 {
-	int		i;
-	int		status;
-	char	**tmp;
-	t_chars	*curr;
-	t_chars	*prev;
-	t_chars	*nxt;
+    int status;
+    char **tmp;
+    t_chars *curr, *prev, *nxt;
 
-	i = 0;
-	if (!arr || !com)
-		return (-1);
-	setter(com);
-	status = loader(arr, com, env);
-	com->env = env;
-	com->p_com = p_com_split(arr);
-	if (!com->p_com || !com->p_com->str)
-	{
-		perror("syntax error");
-		return (1);
-	}
-	curr = com->p_com;
-	prev = NULL;
+    if (!arr || !com)
+        return (-1);
+    setter(com);
+    status = loader(arr, com, env);
+    com->env = env;
+    com->p_com = p_com_split(arr);
+    if (!com->p_com || !com->p_com->str)
+    {
+        perror("syntax error");
+        free_chars(com->p_com);
+        com->p_com = NULL;
+        return (1);
+    }
+    curr = com->p_com;
+    prev = NULL;
 
-	while (curr)
-	{
-		if (curr->str[0] == '\"')
-			tmp = parser(curr->str, env, 0,0);
-		else
-			tmp = parser(curr->str, env, 1,0);
-		if (!tmp)
-		{
-			free_chars(com->p_com);
-			com->p_com = NULL;
-			return (1);
-		}
-		nxt = curr->next;  // Save the next node
-		free(curr->str);
-		curr->str = NULL;
+    while (curr)
+    {
+        if (!curr->str) // Fix: Check for NULL curr->str
+        {
+            free_chars(com->p_com);
+            com->p_com = NULL;
+            return (1);
+        }
+        if (curr->str[0] == '\"')
+            tmp = parser(curr->str, env, 0, 0);
+        else
+            tmp = parser(curr->str, env, 1, 0);
+        if (!tmp)
+        {
+            free_chars(com->p_com);
+            com->p_com = NULL;
+            return (1);
+        }
+        nxt = curr->next; 
+        free(curr->str);
+        curr->str = NULL;
 
-		t_chars *new_head = NULL;
-		t_chars *new_tail = NULL;
+        t_chars *new_head = NULL;
+        t_chars *new_tail = NULL;
 
-		// Build new mini-list from tmp[]
-		for (int j = 0; tmp[j]; j++)
-		{
-			t_chars *new_node = malloc(sizeof(t_chars));
-			if (!new_node)
-			{
-				free2d(tmp);
-				free_chars(com->p_com);
-				return (1);
-			}
-			new_node->str = ft_strdup(tmp[j]);
-			new_node->type = curr->type;
-			new_node->next = NULL;
+        for (int j = 0; tmp[j]; j++)
+        {
+            t_chars *new_node = malloc(sizeof(t_chars));
+            if (!new_node)
+            {
+                free2d(tmp);
+                free_chars(com->p_com);
+                com->p_com = NULL;
+                return (1);
+            }
+            new_node->str = ft_strdup(tmp[j]);
+            new_node->type = curr->type;
+            new_node->next = NULL;
 
-			if (!new_node->str)
-			{
-				free(new_node);
-				free2d(tmp);
-				free_chars(com->p_com);
-				return (1);
-			}
+            if (!new_node->str)
+            {
+                free(new_node);
+                free2d(tmp);
+                free_chars(com->p_com);
+                com->p_com = NULL;
+                return (1);
+            }
 
-			if (!new_head)
-			{
-				new_head = new_node;
-				new_tail = new_node;
-			}
-			else
-			{
-				new_tail->next = new_node;
-				new_tail = new_node;
-			}
-		}
-		// Stitch the new list into the original one
-		if (!prev)
-			com->p_com = new_head;
-		else
-			prev->next = new_head;
-		if (new_tail)
-			new_tail->next = nxt;
-		free(curr); // free the original current node
-		curr = nxt;
-		prev = new_tail;
-		free2d(tmp);
-	}
+            if (!new_head)
+            {
+                new_head = new_node;
+                new_tail = new_node;
+            }
+            else
+            {
+                new_tail->next = new_node;
+                new_tail = new_node;
+            }
+        }
+        if (!prev)
+            com->p_com = new_head;
+        else
+            prev->next = new_head;
+        if (new_tail)
+            new_tail->next = nxt;
+        else if (prev) 
+            prev->next = nxt;
+        free(curr); 
+        curr = nxt;
+        prev = new_tail ? new_tail : prev; 
+        free2d(tmp);
+    }
 
-	if (!com || !com->p_com)
-	{
-		perror("syntax error");
-		return (1);
-	}
-	if (check_builtin(com))
-	{
-		com->p_com->str = createargs(com);
-		if (!com->p_com)
-		{
-			free(com->commande);
-			return (1);
-		}
-	}
-	com->commande = malloc(sizeof(t_args));
-	if (!com->commande)
-		return (1);
-	com->commande->str = ft_split(arr, ' ');
-	if (!com->commande->str)
-	{
-		free(com->commande);
-		com->commande = NULL;
-		return (1);
-	}
-	com->commande->next = NULL;
-	return (0);
+    if (!com || !com->p_com)
+    {
+        perror("syntax error");
+        free_chars(com->p_com); 
+        com->p_com = NULL;
+        return (1);
+    }
+    if (check_builtin(com))
+    {
+        char *new_str = createargs(com);
+        if (!new_str)
+        {
+            free_chars(com->p_com);
+            com->p_com = NULL;
+            free(com->commande); 
+            com->commande = NULL;
+            return (1);
+        }
+        com->p_com->str = new_str;
+    }
+    com->commande = malloc(sizeof(t_args));
+    if (!com->commande)
+    {
+        free_chars(com->p_com);
+        com->p_com = NULL;
+        return (1);
+    }
+    com->commande->str = ft_split(arr, ' ');
+    if (!com->commande->str)
+    {
+        free(com->commande);
+        com->commande = NULL;
+        free_chars(com->p_com);
+        com->p_com = NULL;
+        return (1);
+    }
+    com->commande->next = NULL;
+    return (0);
 }
-

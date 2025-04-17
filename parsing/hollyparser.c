@@ -317,5 +317,5 @@ char	**parser(char *str, t_env *env,int flag, int type)
     result = ft_split(res, ' ');
   else
     result = ft_split(res, 0);
-	return (result);
+	return (free(res), result);
 }

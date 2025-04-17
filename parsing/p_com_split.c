@@ -149,10 +149,12 @@ t_chars *p_com_split(char *str)
 	res = (char **)malloc((count + 1) * sizeof(char *));
   	if (!res) return NULL;
 	res = allocate(res, str, count);
-  if (!res) return NULL;
-  while(res[i]){
-    push_to_list(&s, ft_strdup(res[i]), -1);
-    i++;}
-  free(res);
+  	if (!res) return NULL;
+	while(res[i])
+	{
+    	push_to_list(&s, ft_strdup(res[i]), -1);
+		i++;
+	}
+  	free2d(res);
 	return (s);
 }
