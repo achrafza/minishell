@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/17 08:36:06 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/18 08:32:46 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
         return (-1);
     setter(com);
     status = loader(arr, com, env);
+    if (status == -1)
+      return 1;
     com->env = env;
     com->p_com = p_com_split(arr);
     if (!com->p_com || !com->p_com->str)
