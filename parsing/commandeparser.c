@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 08:32:46 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:55:36 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
             com->p_com = NULL;
             return (1);
         }
-        if (curr->str[0] == '\"')
+        if (curr->str[0] == '\"' || curr->str[0] == '\'')
             tmp = parser(curr->str, env, 0, 0);
         else
             tmp = parser(curr->str, env, 1, 0);

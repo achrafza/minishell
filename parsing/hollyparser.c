@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 02:09:12 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 13:50:23 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:24:52 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,9 +279,10 @@ char	*fill_word(char *dest, char *src, t_env *env,int type)
 			si++; // Skip opening "
 			while (src[si] && src[si] != '"')
 			{
-				if (src[si] == '$' && src[si + 1] && type != 2)
+				if (src[si] == '$' && src[si + 1] && !ft_isspace(src[si + 1]) && src[si + 1] != '"' && type != 2)
+          {
 					di += expand_variable(src + si, env, dest + di, &si);
-				else
+        }else
 					dest[di++] = src[si++];
 			}
 			if (src[si])
