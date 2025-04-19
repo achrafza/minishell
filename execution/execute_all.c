@@ -6,7 +6,7 @@
 /*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/19 08:55:59 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 11:21:06 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int exec_builtin(t_comm *com)
 {
     char *path;
 
-    if (!com || !com->p_com || !com->p_com->str)
+    if (!com || !com->p_com || !com->p_com->str || !com->env)
     {
         if (com && com->env)
             com->env->exit_status = 1;
