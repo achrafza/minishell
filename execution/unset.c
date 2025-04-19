@@ -18,14 +18,14 @@ int	unset(t_env **env, char *var)
 	t_env *prev;
 
 	if (!env || !var || !*var)
-		return (1);
+		return (0);
 
 	curr = *env;
 	prev = NULL;
 
 	while (curr)
 	{
-		if (curr->key && !ft_strcmp(curr->key, var))
+		if (curr->key && ft_strcmp(curr->key, var) == 0)
 		{
 			if (prev)
 				prev->next = curr->next;
@@ -39,5 +39,5 @@ int	unset(t_env **env, char *var)
 		prev = curr;
 		curr = curr->next;
 	}
-	return (1);
+	return (0);
 }
