@@ -6,7 +6,7 @@
 /*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 15:50:30 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 08:55:59 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int exec_builtin(t_comm *com)
     }
     else if (!ft_strcmp(com->p_com->str, "unset"))
     {
-        if (!com->p_com->next->str)
+        if (!com->p_com->next || !com->p_com->next->str)
         {
             printf("minishell: unset: not enough arguments\n");
             com->env->exit_status = 1;
@@ -303,7 +303,7 @@ int execute_all(t_comm *coms, char **envp, int size)
         pids[i] = fork();
         if (pids[i] == -1)
         {
-            printf("minishell: fork: Resource temporarily unavailable\n");
+            perror("minishell:");
             for (int j = 0; j < 2 * (size - 1); j++)
                 close(pipes[j]);
             if (coms && coms[0].env)
@@ -329,7 +329,7 @@ int execute_all(t_comm *coms, char **envp, int size)
             char **exec =  list_to_array(coms[i].p_com);
             if (!exec || !exec[0])
             {
-                printf("minishell: command not found\n");
+                perror("minishell:");
                 if (coms[i].env)
                     coms[i].env->exit_status = 127;
                 free2d(envp);
@@ -344,7 +344,7 @@ int execute_all(t_comm *coms, char **envp, int size)
             else
             {
                 execve(exec[0], exec, envp);
-                printf("minishell: %s: command not found\n", coms[i].p_com->str);
+                perror("minishell: %s: command not found");
                 if (coms[i].env)
                     coms[i].env->exit_status = 127;
                 free2d(envp);

@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 02:09:12 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 17:24:52 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 08:30:50 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	handle_dquotes(const char *wrd, int *i, t_env *env)
 	(*i)++; // Skip opening "
 	while (wrd[*i] && wrd[*i] != '"')
 	{
-		if (wrd[*i] == '$' && wrd[*i + 1])
+		if (wrd[*i] == '$' && wrd[*i + 1] && !ft_isspace(wrd[*i + 1]) && !isquote(wrd[*i + 1]))
 		{
 			count += expander_count((char *)(wrd + *i), env);
 			(*i)++; // Skip $
@@ -247,7 +247,7 @@ int	expand_variable(char *src, t_env *env, char *dest, int *si)
 	return (len);
 }
 
-char	*fill_word(char *dest, char *src, t_env *env,int type)
+char	*fill_word(char *dest, char *src, t_env *env,int type,int *flag)
 {
 	int	si;
 	int	di;
@@ -280,16 +280,18 @@ char	*fill_word(char *dest, char *src, t_env *env,int type)
 			while (src[si] && src[si] != '"')
 			{
 				if (src[si] == '$' && src[si + 1] && !ft_isspace(src[si + 1]) && src[si + 1] != '"' && type != 2)
-          {
+        {
 					di += expand_variable(src + si, env, dest + di, &si);
-        }else
+        }
+        else
 					dest[di++] = src[si++];
 			}
 			if (src[si])
 				si++;
 		}
-		else if (src[si] == '$' && src[si + 1])
+		else if (src[si] == '$' && src[si + 1]){
 			di += expand_variable(src + si, env, dest + di, &si);
+      (*flag)++;}
 		else
 			dest[di++] = src[si++];
 	}
@@ -302,7 +304,8 @@ char	**parser(char *str, t_env *env,int flag, int type)
 	int countw;
 	char *res;
   char **result;
-
+  int f =  0;
+  flag++;
 	if (!str)
 		return (NULL);
 	if (str[0] == '\0')
@@ -323,8 +326,8 @@ char	**parser(char *str, t_env *env,int flag, int type)
 		printf("bash: cannot allocate memory\n");
 		return (NULL);
 	}
-	res = fill_word(res, str, env,type);
-  if (flag)
+	res = fill_word(res, str, env,type,&f);
+  if (f)
     result = ft_split(res, ' ');
   else
     result = ft_split(res, 0);
