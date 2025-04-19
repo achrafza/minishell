@@ -6,7 +6,7 @@
 /*   By: dvrk <dvrk@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 05:02:18 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/19 11:21:06 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 13:30:02 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,9 +327,9 @@ int execute_all(t_comm *coms, char **envp, int size)
             for (int j = 0; j < 2 * (size - 1); j++)
                 close(pipes[j]);
             char **exec =  list_to_array(coms[i].p_com);
-            if (!exec || !exec[0])
+            
+            if ((!in || !out) && !exec)
             {
-                perror("minishell:");
                 if (coms[i].env)
                     coms[i].env->exit_status = 127;
                 free2d(envp);
@@ -341,7 +341,7 @@ int execute_all(t_comm *coms, char **envp, int size)
                 free2d(envp);
                 exit(ret);
             }
-            else
+            else if (exec && exec[0])
             {
                 execve(exec[0], exec, envp);
                 perror("minishell: %s: command not found");
@@ -350,6 +350,8 @@ int execute_all(t_comm *coms, char **envp, int size)
                 free2d(envp);
                 exit(127);
             }
+            else
+              exit(0);
         }
         i++;
     }

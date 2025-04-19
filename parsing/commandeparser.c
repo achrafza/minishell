@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 03:09:11 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 16:55:36 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 13:22:47 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int commandeparser(char *arr, t_comm *com, t_env *env)
     com->p_com = p_com_split(arr);
     if (!com->p_com || !com->p_com->str)
     {
-        perror("syntax error");
         free_chars(com->p_com);
         com->p_com = NULL;
         return (1);

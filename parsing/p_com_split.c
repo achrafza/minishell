@@ -6,7 +6,7 @@
 /*   By: azahid <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 20:18:10 by azahid            #+#    #+#             */
-/*   Updated: 2025/04/18 16:54:52 by azahid           ###   ########.fr       */
+/*   Updated: 2025/04/19 13:21:29 by azahid           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,10 +162,7 @@ t_chars	*p_com_split(char *str)
 		return (NULL);
 	count = count_checker(str);
   if (count == 0)
-  {
-    printf("bash: syntax error: unbalanced quotes\n");
     return NULL;
-  }
 	res = (char **)malloc((count + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
